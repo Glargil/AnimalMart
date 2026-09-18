@@ -1,5 +1,4 @@
 ﻿using AnimalMart.Interfaces;
-using AnimalMart.Models;
 using Isopoh.Cryptography.Argon2;
 
 namespace AnimalMart.Services

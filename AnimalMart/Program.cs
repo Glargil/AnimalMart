@@ -20,8 +20,22 @@ namespace AnimalMart
             builder.Services.AddScoped<IUserRepo, UserRepo>();
             builder.Services.AddScoped<IUserService, UserService>();
 
-            var app = builder.Build();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", builder =>
+                {
+                    builder
+                    //allows any domain or site to access API
+                    .AllowAnyOrigin()
+                    //allows any HTTP method when accessing API (GET, POST, PUT, DELETE, etc.)
+                    .AllowAnyMethod()
+                    //allows any HTTP header to be included in the request when accessing API
+                    .AllowAnyHeader();
+                });
+            });
 
+            var app = builder.Build();
+            
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -37,6 +51,9 @@ namespace AnimalMart
 
             app.UseSwagger();
             app.UseSwaggerUI();
+
+            // Enable CORS
+            app.UseCors("AllowAll");
 
             app.UseAuthorization();
 

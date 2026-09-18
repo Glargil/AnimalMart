@@ -1,5 +1,4 @@
 ﻿using AnimalMart.Interfaces;
-using AnimalMart.Models;
 using AnimalMart.Services;
 using Isopoh.Cryptography.Argon2;
 using Microsoft.AspNetCore.Mvc;

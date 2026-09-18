@@ -1,6 +1,4 @@
-﻿using AnimalMart.Models;
-
-namespace AnimalMart.Interfaces
+﻿namespace AnimalMart.Interfaces
 {
     public interface IUserService
     {
