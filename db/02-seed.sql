@@ -30,3 +30,50 @@ SELECT id, 'Male', 'Gromphadorhina portentosa', '2025-10-01' FROM products WHERE
 
 INSERT INTO animals (id, sex, species, birthday)
 SELECT id, 'Female', 'Pterinochilus murinus', '2025-02-14' FROM products WHERE name = 'Ember';
+
+-- Users
+INSERT INTO users (name, email, phone_number, password_hash) VALUES
+    ('Freja Nielsen', 'freja.nielsen@example.com', '+45 20 12 34 56', 'REPLACE_WITH_REAL_HASH_1'),
+    ('Mikkel Sørensen', 'mikkel.sorensen@example.com', NULL, 'REPLACE_WITH_REAL_HASH_2');
+    -- ============================================================
+-- Users
+-- ============================================================
+INSERT INTO users (name, email, phone_number, password_hash) VALUES
+    ('Freja Nielsen',   'freja.nielsen@example.com',   '+45 20 12 34 56', 'REPLACE_WITH_REAL_HASH_1'),
+    ('Mikkel Sørensen', 'mikkel.sorensen@example.com', NULL,              'REPLACE_WITH_REAL_HASH_2');
+
+INSERT INTO shopping_carts (user_id)
+SELECT id FROM users WHERE email = 'freja.nielsen@example.com';
+
+INSERT INTO shopping_carts (user_id)
+SELECT id FROM users WHERE email = 'mikkel.sorensen@example.com';
+
+-- Freja's cart: a heat lamp and a gecko
+INSERT INTO cart_items (cart_id, product_id)
+SELECT sc.id, p.id
+FROM shopping_carts sc
+JOIN users u ON u.id = sc.user_id
+JOIN products p ON p.name = 'Terrarium Heat Lamp'
+WHERE u.email = 'freja.nielsen@example.com';
+
+INSERT INTO cart_items (cart_id, product_id)
+SELECT sc.id, p.id
+FROM shopping_carts sc
+JOIN users u ON u.id = sc.user_id
+JOIN products p ON p.name = 'Rango'
+WHERE u.email = 'freja.nielsen@example.com';
+
+-- Mikkel's cart: calcium powder and a tarantula
+INSERT INTO cart_items (cart_id, product_id)
+SELECT sc.id, p.id
+FROM shopping_carts sc
+JOIN users u ON u.id = sc.user_id
+JOIN products p ON p.name = 'Calcium Powder with D3'
+WHERE u.email = 'mikkel.sorensen@example.com';
+
+INSERT INTO cart_items (cart_id, product_id)
+SELECT sc.id, p.id
+FROM shopping_carts sc
+JOIN users u ON u.id = sc.user_id
+JOIN products p ON p.name = 'Ember'
+WHERE u.email = 'mikkel.sorensen@example.com';

@@ -1,3 +1,4 @@
+using AnimalMart.Repos;
 namespace AnimalMart
 {
     public class Program
@@ -8,8 +9,14 @@ namespace AnimalMart
 
             // Add services to the container.
             builder.Services.AddRazorPages();
+            builder.Services.AddControllers();
+            builder.Services.AddEndpointsApiExplorer();
 
+            builder.Services.AddSwaggerGen();
+
+            builder.Services.AddScoped<IUserRepo, UserRepo>();
             var app = builder.Build();
+
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -23,12 +30,16 @@ namespace AnimalMart
 
             app.UseRouting();
 
+            app.UseSwagger();
+            app.UseSwaggerUI();
+
             app.UseAuthorization();
 
             app.MapStaticAssets();
             app.MapRazorPages()
                .WithStaticAssets();
 
+            app.MapControllers();
             app.Run();
         }
     }
