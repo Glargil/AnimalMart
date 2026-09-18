@@ -1,4 +1,4 @@
-﻿namespace AnimalMart.Repos
+﻿namespace AnimalMart.Interfaces
 {
     public interface IUserRepo
     {

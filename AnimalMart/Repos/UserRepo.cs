@@ -1,4 +1,5 @@
-﻿using Npgsql;
+﻿using AnimalMart.Interfaces;
+using Npgsql;
 using System.Data;
 
 namespace AnimalMart.Repos

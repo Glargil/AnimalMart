@@ -1,4 +1,6 @@
+using AnimalMart.Interfaces;
 using AnimalMart.Repos;
+using AnimalMart.Services;
 namespace AnimalMart
 {
     public class Program
@@ -14,7 +16,10 @@ namespace AnimalMart
 
             builder.Services.AddSwaggerGen();
 
+            //register repo/service
             builder.Services.AddScoped<IUserRepo, UserRepo>();
+            builder.Services.AddScoped<IUserService, UserService>();
+
             var app = builder.Build();
 
 
