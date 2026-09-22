@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using AnimalMart.Interfaces;
 using AnimalMart.Repos;
 using AnimalMart.Services;
@@ -13,12 +14,14 @@ namespace AnimalMart
             builder.Services.AddRazorPages();
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
+            builder.Services.ConfigureHttpJsonOptions(options => options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
             builder.Services.AddSwaggerGen();
 
             //register repo/service
             builder.Services.AddScoped<IUserRepo, UserRepo>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IPasswordAnalyzer, PasswordAnalyzerService>();
 
             builder.Services.AddCors(options =>
             {
