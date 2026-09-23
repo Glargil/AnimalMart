@@ -1,5 +1,5 @@
 ﻿using AnimalMart.Interfaces;
-using Isopoh.Cryptography.Argon2;
+using AnimalMart.Security;
 
 namespace AnimalMart.Services
 {
@@ -19,7 +19,7 @@ namespace AnimalMart.Services
                 Name = dto.Name,
                 Email = dto.Email,
                 PhoneNumber = dto.PhoneNumber,
-                PasswordHash = Argon2.Hash(dto.Password)
+                PasswordHash = Argon2PasswordHasher.HashPassword(dto.Password)
             };
 
             return _repo.CreateUser(user);
