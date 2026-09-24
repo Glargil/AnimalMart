@@ -6,11 +6,15 @@ namespace AnimalMart.Pages
 {
     public class CreateUserModel : PageModel
     {
+        private readonly IPasswordAnalyzer _analyzer;
+        [BindProperty]
+        public string? Password { get; set; }
         private readonly IUserService _userService;
 
-        public CreateUserModel(IUserService userService)
+        public CreateUserModel(IUserService userService, IPasswordAnalyzer analyzer)
         {
             _userService = userService;
+            _analyzer = analyzer;
         }
 
         [BindProperty]
@@ -21,13 +25,22 @@ namespace AnimalMart.Pages
         public void OnGet()
         {
         }
+        public IActionResult OnGetScore([FromQuery] string? password, [FromQuery] string? username)
+        {
+            var result = _analyzer.Analyze(password ?? "", username);
+            return new JsonResult(result);
+        }
 
         public IActionResult OnPost()
         {
+            var analysis = _analyzer.Analyze(NewUser.Password ?? "", NewUser.Name);
+
+            if (!analysis.MeetsPolicy)
+                ModelState.AddModelError("NewUser.Password",
+                "Passwordet overholder ikke password-policyn.");
+
             if (!ModelState.IsValid)
-            {
                 return Page();
-            }
 
             try
             {
