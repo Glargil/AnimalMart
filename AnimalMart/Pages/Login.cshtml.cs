@@ -3,6 +3,7 @@ using AnimalMart.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 namespace AnimalMart.Pages
 {
