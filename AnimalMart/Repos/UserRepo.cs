@@ -1,6 +1,6 @@
-﻿using AnimalMart.Interfaces;
+﻿using System.Data;
+using AnimalMart.Interfaces;
 using Npgsql;
-using System.Data;
 
 namespace AnimalMart.Repos
 {
@@ -10,8 +10,11 @@ namespace AnimalMart.Repos
 
         public UserRepo(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection")
-            ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            _connectionString =
+                configuration.GetConnectionString("DefaultConnection")
+                ?? throw new InvalidOperationException(
+                    "Connection string 'DefaultConnection' not found."
+                );
         }
 
         public User CreateUser(User user)
@@ -22,7 +25,8 @@ namespace AnimalMart.Repos
                 //INSERT INTO users (name, email, phone_number, password_hash)
                 //OUTPUT INSERTED.Id
                 //VALUES (@Name, @Email, @PhoneNumber, @PasswordHash)";
-                const string query = @"
+                const string query =
+                    @"
                     INSERT INTO users (name, email, phone_number, password_hash)
                     VALUES (@name, @email, @phone_number, @password_hash)
                     RETURNING id";
@@ -32,13 +36,14 @@ namespace AnimalMart.Repos
                 {
                     command.Parameters.AddWithValue("@name", user.Name);
                     command.Parameters.AddWithValue("@email", user.Email);
-                    command.Parameters.AddWithValue("@phone_number", (object?)user.PhoneNumber 
-                        ?? DBNull.Value);
+                    command.Parameters.AddWithValue(
+                        "@phone_number",
+                        (object?)user.PhoneNumber ?? DBNull.Value
+                    );
                     command.Parameters.AddWithValue("@password_hash", user.PasswordHash);
 
                     var newId = command.ExecuteScalar();
                     user.Id = Convert.ToInt32(newId);
-                    
                 }
             }
             return user;
@@ -48,12 +53,14 @@ namespace AnimalMart.Repos
         {
             throw new NotImplementedException();
         }
+
         public List<User> GetAllUsers()
         {
             var users = new List<User>();
             using (var connection = new NpgsqlConnection(_connectionString))
             {
-                const string query = "SELECT id, name, email, phone_number, password_hash FROM users";
+                const string query =
+                    "SELECT id, name, email, phone_number, password_hash FROM users";
                 connection.Open();
                 using (var command = new NpgsqlCommand(query, connection))
                 using (var reader = command.ExecuteReader())
@@ -67,8 +74,9 @@ namespace AnimalMart.Repos
                             Name = reader.GetString(reader.GetOrdinal("name")),
                             Email = reader.GetString(reader.GetOrdinal("email")),
                             PhoneNumber = reader.IsDBNull(reader.GetOrdinal("phone_number"))
-                                ? null : reader.GetString(reader.GetOrdinal("phone_number")),
-                            PasswordHash = reader.GetString(reader.GetOrdinal("password_hash"))
+                                ? null
+                                : reader.GetString(reader.GetOrdinal("phone_number")),
+                            PasswordHash = reader.GetString(reader.GetOrdinal("password_hash")),
                         };
                         users.Add(user);
                     }
@@ -82,10 +90,40 @@ namespace AnimalMart.Repos
             throw new NotImplementedException();
         }
 
+        public User? GetUserByEmail(string email)
+        {
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                const string query =
+                    "SELECT id, name, email, phone_number, password_hash FROM users WHERE lower(email) = lower(@email)";
+                connection.Open();
+                using (var command = new NpgsqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@email", email);
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (!reader.Read())
+                        {
+                            return null;
+                        }
+                        return new User
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("id")),
+                            Name = reader.GetString(reader.GetOrdinal("name")),
+                            Email = reader.GetString(reader.GetOrdinal("email")),
+                            PhoneNumber = reader.IsDBNull(reader.GetOrdinal("phone_number"))
+                                ? null
+                                : reader.GetString(reader.GetOrdinal("phone_number")),
+                            PasswordHash = reader.GetString(reader.GetOrdinal("password_hash")),
+                        };
+                    }
+                }
+            }
+        }
+
         public User UpdateUser(User user)
         {
             throw new NotImplementedException();
         }
-        
     }
 }
