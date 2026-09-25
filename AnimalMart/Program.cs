@@ -1,10 +1,10 @@
-using System.Text.Json.Serialization;
-using System.Net;
 using AnimalMart.Interfaces;
 using AnimalMart.Repos;
 using AnimalMart.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.HttpOverrides;
+using System.Net;
+using System.Text.Json.Serialization;
 
 namespace AnimalMart
 {
@@ -27,6 +27,12 @@ namespace AnimalMart
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IPasswordAnalyzer, PasswordAnalyzerService>();
             builder.Services.AddSingleton<ILoginAttemptTracker, LoginAttemptTracker>();
+
+            //Password reset services
+            builder.Services.AddScoped<IPasswordResetTokenRepo, PasswordResetTokenRepo>();
+            builder.Services.AddScoped<IPasswordResetService, PasswordResetService>();
+            //emailsender temporary swap for SmtpEmailSender later
+            builder.Services.AddScoped<IEmailSender, ConsoleEmailSender>();
 
             builder
                 .Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -64,7 +70,7 @@ namespace AnimalMart
             var forwardedHeadersOptions = new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor |
-                    ForwardedHeaders.XForwardedProto, 
+                    ForwardedHeaders.XForwardedProto,
                 ForwardLimit = 1
             };
             if (!app.Environment.IsDevelopment())

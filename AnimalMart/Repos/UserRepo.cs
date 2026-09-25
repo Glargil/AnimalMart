@@ -1,7 +1,5 @@
-﻿using AnimalMart.Interfaces;
-using Microsoft.Data.SqlClient;
+using AnimalMart.Interfaces;
 using Npgsql;
-using System.Data;
 
 namespace AnimalMart.Repos
 {
@@ -22,10 +20,6 @@ namespace AnimalMart.Repos
         {
             using (var connection = new NpgsqlConnection(_connectionString))
             {
-                //const string query = @"
-                //INSERT INTO users (name, email, phone_number, password_hash)
-                //OUTPUT INSERTED.Id
-                //VALUES (@Name, @Email, @PhoneNumber, @PasswordHash)";
                 const string query =
                     @"
                     INSERT INTO users (name, email, phone_number, password_hash)
@@ -88,7 +82,38 @@ namespace AnimalMart.Repos
 
         public User GetById(int userId)
         {
-            throw new NotImplementedException();
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                const string query =
+                    "SELECT id, name, email, phone_number, password_hash FROM users WHERE id = @id";
+                connection.Open();
+                using (var command = new NpgsqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@id", userId);
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (!reader.Read())
+                        {
+                            // Matches the rest of this class's not-found handling:
+                            // GetByEmail returns null for "not found", but the IUserRepo
+                            // signature for GetById is non-nullable, so a caller passing
+                            // a stale/unknown id gets an explicit failure instead of a
+                            // silent null that would NullReferenceException later.
+                            throw new KeyNotFoundException($"No user found with id {userId}.");
+                        }
+                        return new User
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("id")),
+                            Name = reader.GetString(reader.GetOrdinal("name")),
+                            Email = reader.GetString(reader.GetOrdinal("email")),
+                            PhoneNumber = reader.IsDBNull(reader.GetOrdinal("phone_number"))
+                                ? null
+                                : reader.GetString(reader.GetOrdinal("phone_number")),
+                            PasswordHash = reader.GetString(reader.GetOrdinal("password_hash")),
+                        };
+                    }
+                }
+            }
         }
 
         public User? GetByEmail(string email)
@@ -126,14 +151,15 @@ namespace AnimalMart.Repos
         {
             throw new NotImplementedException();
         }
+
         public async Task UpdatePasswordHashAsync(int userId, string newPasswordHash)
         {
-            const string sql = "UPDATE Users SET PasswordHash = @PasswordHash WHERE Id = @Id;";
+            const string sql = "UPDATE users SET password_hash = @password_hash WHERE id = @id;";
 
-            await using var conn = new SqlConnection(_connectionString);
-            await using var cmd = new SqlCommand(sql, conn);
-            cmd.Parameters.Add("@PasswordHash", SqlDbType.NVarChar, 512).Value = newPasswordHash;
-            cmd.Parameters.Add("@Id", SqlDbType.Int).Value = userId;
+            await using var conn = new NpgsqlConnection(_connectionString);
+            await using var cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@password_hash", newPasswordHash);
+            cmd.Parameters.AddWithValue("@id", userId);
 
             await conn.OpenAsync();
             await cmd.ExecuteNonQueryAsync();

@@ -36,7 +36,7 @@ namespace AnimalMart.Services
             {
                 return new LoginAttemptResult { Result = LoginResult.LockedOut, User = null };
             }
-            var user = _repo.GetUserByEmail(dto.Email);
+            var user = _repo.GetByEmail(dto.Email);
             var passwordOk = user != null && Argon2.Verify(user.PasswordHash, dto.Password);
 
             if (!passwordOk)
