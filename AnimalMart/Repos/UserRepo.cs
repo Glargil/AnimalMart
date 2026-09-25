@@ -17,7 +17,7 @@ namespace AnimalMart.Repos
                 );
         }
 
-        public User CreateUser(User user)
+        public User Create(User user)
         {
             using (var connection = new NpgsqlConnection(_connectionString))
             {
@@ -49,12 +49,12 @@ namespace AnimalMart.Repos
             return user;
         }
 
-        public void DeleteUser(int userId)
+        public void Delete(int userId)
         {
             throw new NotImplementedException();
         }
 
-        public List<User> GetAllUsers()
+        public List<User> GetAll()
         {
             var users = new List<User>();
             using (var connection = new NpgsqlConnection(_connectionString))
@@ -85,7 +85,7 @@ namespace AnimalMart.Repos
             return users;
         }
 
-        public User GetUser(int userId)
+        public User GetById(int userId)
         {
             throw new NotImplementedException();
         }
@@ -121,7 +121,7 @@ namespace AnimalMart.Repos
             }
         }
 
-        public User UpdateUser(User user)
+        public User Update(User user)
         {
             throw new NotImplementedException();
         }

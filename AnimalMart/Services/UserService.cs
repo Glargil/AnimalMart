@@ -1,5 +1,6 @@
 ﻿using AnimalMart.Interfaces;
 using AnimalMart.Security;
+using Isopoh.Cryptography.Argon2;
 
 namespace AnimalMart.Services
 {
@@ -25,7 +26,7 @@ namespace AnimalMart.Services
                 PasswordHash = Argon2PasswordHasher.HashPassword(dto.Password)
             };
 
-            return _repo.CreateUser(user);
+            return _repo.Create(user);
         }
 
 

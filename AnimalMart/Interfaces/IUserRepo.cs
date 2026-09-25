@@ -2,11 +2,11 @@
 {
     public interface IUserRepo
     {
-        User CreateUser(User user);
-        User GetUser(int userId);
-        User UpdateUser(User user);
-        void DeleteUser(int userId);
-        List<User> GetAllUsers();
+        User Create(User user);
+        User GetById(int userId);
+        User Update(User user);
+        void Delete(int userId);
+        List<User> GetAll();
     
         /// <summary>
         /// Henter en bruger basseret paa E-mail.
