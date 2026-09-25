@@ -13,7 +13,10 @@
         ///</summary>
         ///<param name="email">Brugerens e-mailadresse. </param>
         ///<returns>Brugerobjekt eller null, hvis brugeren ikke findes.</returns>
-        User? GetUserByEmail(string email);
+        User? GetByEmail(string email);
+
+        //method for updating hashed password
+        Task UpdatePasswordHashAsync(int userId, string passwordHash);
 
     }
 }

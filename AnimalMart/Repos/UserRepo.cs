@@ -1,6 +1,7 @@
-﻿using System.Data;
-using AnimalMart.Interfaces;
+﻿using AnimalMart.Interfaces;
+using Microsoft.Data.SqlClient;
 using Npgsql;
+using System.Data;
 
 namespace AnimalMart.Repos
 {
@@ -90,7 +91,7 @@ namespace AnimalMart.Repos
             throw new NotImplementedException();
         }
 
-        public User? GetUserByEmail(string email)
+        public User? GetByEmail(string email)
         {
             using (var connection = new NpgsqlConnection(_connectionString))
             {
@@ -124,6 +125,18 @@ namespace AnimalMart.Repos
         public User Update(User user)
         {
             throw new NotImplementedException();
+        }
+        public async Task UpdatePasswordHashAsync(int userId, string newPasswordHash)
+        {
+            const string sql = "UPDATE Users SET PasswordHash = @PasswordHash WHERE Id = @Id;";
+
+            await using var conn = new SqlConnection(_connectionString);
+            await using var cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.Add("@PasswordHash", SqlDbType.NVarChar, 512).Value = newPasswordHash;
+            cmd.Parameters.Add("@Id", SqlDbType.Int).Value = userId;
+
+            await conn.OpenAsync();
+            await cmd.ExecuteNonQueryAsync();
         }
     }
 }
