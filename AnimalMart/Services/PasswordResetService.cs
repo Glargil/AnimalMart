@@ -1,5 +1,6 @@
 ﻿using AnimalMart.Interfaces;
 using AnimalMart.Security;
+using Isopoh.Cryptography.Argon2;
 
 namespace AnimalMart.Services
 {
@@ -110,7 +111,7 @@ namespace AnimalMart.Services
                 return false;
             }
 
-            string newHash = Argon2PasswordHasher.HashPassword(newPassword);
+            string newHash = Argon2.Hash(newPassword);
             await _userRepository.UpdatePasswordHashAsync(record.UserId, newHash);
 
             // Delete this token (single-use satisfied) and any other

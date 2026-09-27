@@ -23,7 +23,7 @@ namespace AnimalMart.Services
                 Name = dto.Name,
                 Email = dto.Email,
                 PhoneNumber = dto.PhoneNumber,
-                PasswordHash = Argon2PasswordHasher.HashPassword(dto.Password)
+                PasswordHash = Argon2.Hash(dto.Password)
             };
 
             return _repo.Create(user);
