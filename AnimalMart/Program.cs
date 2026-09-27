@@ -33,7 +33,7 @@ namespace AnimalMart
             builder.Services.AddScoped<IPasswordResetService, PasswordResetService>();
 
             //console emailsender used for reset password testing
-            builder.Services.AddScoped<IEmailService, ConsoleEmailSender>();
+            //builder.Services.AddScoped<IEmailService, ConsoleEmailSender>();
             //real emailsender service
             builder.Services.AddScoped<IEmailService, EmailService>();
             builder

@@ -1,11 +1,11 @@
-﻿using MailKit.Net.Smtp;
+using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
 using AnimalMart.Interfaces;
 
 namespace AnimalMart.Services
 {
-        
+
 public class EmailService : IEmailService
     {
         private readonly IConfiguration _configuration;
@@ -20,31 +20,48 @@ public class EmailService : IEmailService
             string subject,
             string body)
         {
+            // Validate config up front, with a specific error per missing/invalid
+            // key, instead of letting a null flow into MailKit and surface as a
+            // confusing NullReferenceException/FormatException deep in the call.
+            var fromAddress = _configuration["Email:FromAddress"]
+                ?? throw new InvalidOperationException("Missing configuration value 'Email:FromAddress'.");
+            var smtpHost = _configuration["Email:SmtpHost"]
+                ?? throw new InvalidOperationException("Missing configuration value 'Email:SmtpHost'.");
+            var smtpPortRaw = _configuration["Email:SmtpPort"]
+                ?? throw new InvalidOperationException("Missing configuration value 'Email:SmtpPort'.");
+            if (!int.TryParse(smtpPortRaw, out var smtpPort))
+            {
+                throw new InvalidOperationException(
+                    $"Configuration value 'Email:SmtpPort' is not a valid port number: '{smtpPortRaw}'.");
+            }
+            var smtpPassword = _configuration["Email:SmtpPassword"]
+                ?? throw new InvalidOperationException("Missing configuration value 'Email:SmtpPassword'.");
+
             var message = new MimeMessage();
 
             message.From.Add(new MailboxAddress(
                 "My Razor App",
-                _configuration["Email:Address"]!));
+                fromAddress));
 
             message.To.Add(MailboxAddress.Parse(recipient));
 
             message.Subject = subject;
 
-            message.Body = new TextPart("html")
+            message.Body = new TextPart("plain")
             {
                 Text = body
             };
-
+            //SmtpClient is called - no error handling currently
             using var smtp = new SmtpClient();
-
+            //no error handling required, since we validated our values up front
             await smtp.ConnectAsync(
-                _configuration["Email:SmtpServer"],
-                int.Parse(_configuration["Email:Port"]!),
+                smtpHost,
+                smtpPort,
                 SecureSocketOptions.StartTls);
 
             await smtp.AuthenticateAsync(
-                _configuration["Email:Address"],
-                _configuration["Email:Password"]);
+                fromAddress,
+                smtpPassword);
 
             await smtp.SendAsync(message);
 
