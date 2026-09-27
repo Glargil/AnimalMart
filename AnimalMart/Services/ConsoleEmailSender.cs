@@ -1,7 +1,7 @@
 ﻿using AnimalMart.Interfaces;
 namespace AnimalMart.Services
 {
-    public class ConsoleEmailSender : IEmailSender
+    public class ConsoleEmailSender : IEmailService
     {
         public string? LastBody { get; private set; }
         public Task SendAsync(string toEmail, string subject, string plainTextBody)

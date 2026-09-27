@@ -15,16 +15,16 @@ namespace AnimalMart.Services
 
         private readonly IUserRepo _userRepository;
         private readonly IPasswordResetTokenRepo _tokenRepository;
-        private readonly IEmailSender _emailSender;
+        private readonly IEmailService _emailService;
 
         public PasswordResetService(
             IUserRepo userRepository,
             IPasswordResetTokenRepo tokenRepository,
-            IEmailSender emailSender)
+            IEmailService emailService)
         {
             _userRepository = userRepository;
             _tokenRepository = tokenRepository;
-            _emailSender = emailSender;
+            _emailService = emailService;
         }
 
         public async Task RequestPasswordResetAsync(string email, string baseUrl)
@@ -74,7 +74,7 @@ namespace AnimalMart.Services
                 "your password will not be changed.";
 
             // Deliberately no password (old or new) appears anywhere in this email.
-            await _emailSender.SendAsync(user.Email, "Reset your password", body);
+            await _emailService.SendAsync(user.Email, "Reset your password", body);
         }
 
         public async Task<bool> ValidateTokenAsync(string token)
@@ -122,7 +122,7 @@ namespace AnimalMart.Services
             var user = _userRepository.GetById(record.UserId);
             if (user is not null)
             {
-                await _emailSender.SendAsync(
+                await _emailService.SendAsync(
                     user.Email,
                     "Your password was changed",
                     "Your password was just reset successfully.\n\n" +

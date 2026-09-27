@@ -31,9 +31,11 @@ namespace AnimalMart
             //Password reset services
             builder.Services.AddScoped<IPasswordResetTokenRepo, PasswordResetTokenRepo>();
             builder.Services.AddScoped<IPasswordResetService, PasswordResetService>();
-            //emailsender temporary swap for SmtpEmailSender later
-            builder.Services.AddScoped<IEmailSender, ConsoleEmailSender>();
 
+            //console emailsender used for reset password testing
+            builder.Services.AddScoped<IEmailService, ConsoleEmailSender>();
+            //real emailsender service
+            builder.Services.AddScoped<IEmailService, EmailService>();
             builder
                 .Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
