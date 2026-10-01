@@ -25,7 +25,7 @@ namespace AnimalMart.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<User>> GetAll()
         {
-            IEnumerable<User>? result = _repo.GetAllUsers();
+            IEnumerable<User>? result = _repo.GetAll();
             if (result == null || !result.Any())
             {
                 return NoContent();

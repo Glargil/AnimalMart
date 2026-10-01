@@ -1,4 +1,5 @@
 ﻿using AnimalMart.Interfaces;
+using AnimalMart.Security;
 using Isopoh.Cryptography.Argon2;
 
 namespace AnimalMart.Services
@@ -22,10 +23,10 @@ namespace AnimalMart.Services
                 Name = dto.Name,
                 Email = dto.Email,
                 PhoneNumber = dto.PhoneNumber,
-                PasswordHash = Argon2.Hash(dto.Password),
+                PasswordHash = Argon2.Hash(dto.Password)
             };
 
-            return _repo.CreateUser(user);
+            return _repo.Create(user);
         }
 
 
@@ -35,7 +36,7 @@ namespace AnimalMart.Services
             {
                 return new LoginAttemptResult { Result = LoginResult.LockedOut, User = null };
             }
-            var user = _repo.GetUserByEmail(dto.Email);
+            var user = _repo.GetByEmail(dto.Email);
             var passwordOk = user != null && Argon2.Verify(user.PasswordHash, dto.Password);
 
             if (!passwordOk)

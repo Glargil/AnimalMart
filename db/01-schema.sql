@@ -56,3 +56,23 @@ CREATE TABLE cart_items (
     cart_id    INTEGER NOT NULL REFERENCES shopping_carts(id) ON DELETE CASCADE,
     product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE
 );
+
+-- Password reset tokens
+CREATE TABLE PasswordResetTokens (
+    Id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    UserId        INT NOT NULL,
+    TokenHash     BYTEA NOT NULL,                 -- SHA-256 of the raw token (32 bytes)
+    ExpiresAtUtc  TIMESTAMPTZ NOT NULL,
+    CreatedAtUtc  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    CONSTRAINT FK_PasswordResetTokens_Users
+        FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE CASCADE
+);
+ 
+-- Fast, unique lookup by token hash (used on every reset-link click).
+CREATE UNIQUE INDEX IX_PasswordResetTokens_TokenHash
+    ON PasswordResetTokens(TokenHash);
+ 
+-- Fast lookup of "does this user already have a pending token" for
+-- per-account throttling and cleanup.
+CREATE INDEX IX_PasswordResetTokens_UserId
+    ON PasswordResetTokens(UserId);
