@@ -67,6 +67,17 @@ namespace AnimalMart
                 );
             });
 
+            //HSTS options
+            builder.Services.AddHsts(options =>
+            {
+                //Once a browser sees the header, it will refuse plain HTTP to that host for this timespan 
+                //SET TO ONLY 1 DAY FOR TESTING
+                options.MaxAge = TimeSpan.FromDays(1);
+                options.IncludeSubDomains = true;
+                options.Preload = false; // only set true if you intend to submit to hstspreload.org
+                options.ExcludedHosts.Clear(); // testing only, remove before deploy
+            });
+
             var app = builder.Build();
 
             var forwardedHeadersOptions = new ForwardedHeadersOptions
@@ -82,13 +93,13 @@ namespace AnimalMart
             app.UseForwardedHeaders(forwardedHeadersOptions);
 
 
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
-            {
+            // Configure the HTTP request pipeline. CURRENTLY DISABLED FOR RUNNING LOCALLY ONLY
+            //if (!app.Environment.IsDevelopment())
+            //{
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            app.UseHsts();
+            //}
 
             app.UseHttpsRedirection();
 
