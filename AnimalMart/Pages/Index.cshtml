@@ -3,8 +3,89 @@
 @{
     ViewData["Title"] = "Home page";
 }
+<section class="mb-5">
+    <h2>Animals</h2>
+    @if (Model.Animals.Count == 0)
+    {
+        <p class="text-muted">No animals for sale right now.</p>
+    }
+    else
+    {
+        <div class="product-grid">
+            @foreach (var animal in Model.Animals)
+            {
+                <div class="product-box">
+                    <h3>@animal.Name</h3>
+                    <p class="product-meta">@animal.Species · @animal.Sex · born @animal.BirthDay.ToString("dd-MM-yyyy")</p>
+                    <p>@animal.Description</p>
+                    <p class="product-price">@animal.Price.ToString("0.00") kr.</p>
+                </div>
+            }
+        </div>
+    }
+</section>
+<section class="mb-5">
+    <h2>Items</h2>
+    @if (Model.Items.Count == 0)
+    {
+        <p class="text-muted">No items for sale right now.</p>
+    }
+    else
+    {
+        <div class="product-grid">
+            @foreach (var item in Model.Items)
+            {
+                <div class="product-box">
+                    <h3>@item.Name</h3>
+                    <p class="product-meta">@(item.Stock > 0 ? $"{item.Stock} in stock" : "Out of stock")</p>
+                    <p>@item.Description</p>
+                    <p class="product-price">@item.Price.ToString("0.00") kr.</p>
+                </div>
+            }
+        </div>
+    }
+</section>
+<style>
+    /* Product grid + card styles */
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1rem;
+        align-items: start;
+        width: 100%;
+    }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+    /* Card / product box */
+    .product-box {
+        background: #fff;
+        border: 1px solid #e9ecef;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+        /* Title and meta */
+        .product-box h3 {
+            margin: 0 0 0.25rem 0;
+            font-size: 1.05rem;
+        }
+
+    .product-meta {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+    /* Price alignment */
+    .product-price {
+        margin-top: auto;
+        font-weight: 600;
+        color: #1f6feb;
+    }
+        .product-box {
+            padding: 1.25rem;
+        }
+    
+</style>

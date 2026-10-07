@@ -22,11 +22,16 @@ namespace AnimalMart
 
             builder.Services.AddSwaggerGen();
 
-            //register repo/service
+            //register repo/service for users/password hashing
             builder.Services.AddScoped<IUserRepo, UserRepo>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IPasswordAnalyzer, PasswordAnalyzerService>();
             builder.Services.AddSingleton<ILoginAttemptTracker, LoginAttemptTracker>();
+            //register factories and repos/services for products
+            builder.Services.AddSingleton<AnimalFactory>();
+            builder.Services.AddSingleton<ItemFactory>();
+            builder.Services.AddScoped<IAnimalRepo, AnimalRepo>();
+            builder.Services.AddScoped<IItemRepo, ItemRepo>();
 
             //Password reset services
             builder.Services.AddScoped<IPasswordResetTokenRepo, PasswordResetTokenRepo>();

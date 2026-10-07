@@ -2,18 +2,18 @@
 
 namespace AnimalMart.Repos
 {
-    public class AnimalRepo : IAnimalRepo
+    public class ItemRepo : IItemRepo
     {
-        // Joins the base table with the subtype table so one row has every Animal field.
+        // Joins the base table with the subtype table so one row has every Item field.
         private const string SelectSql = @"
-            SELECT p.id, p.price, p.name, p.description, a.sex, a.species, a.birthday
+            SELECT p.id, p.price, p.name, p.description, i.stock
             FROM products p
-            JOIN animals a ON a.id = p.id";
+            JOIN items i ON i.id = p.id";
 
         private readonly string _connectionString;
-        private readonly AnimalFactory _factory;
+        private readonly ItemFactory _factory;
 
-        public AnimalRepo(IConfiguration configuration, AnimalFactory factory)
+        public ItemRepo(IConfiguration configuration, ItemFactory factory)
         {
             _connectionString =
                 configuration.GetConnectionString("DefaultConnection")
@@ -23,21 +23,21 @@ namespace AnimalMart.Repos
             _factory = factory;
         }
 
-        public IEnumerable<Animal> GetAll()
+        public IEnumerable<Item> GetAll()
         {
-            var animals = new List<Animal>();
+            var items = new List<Item>();
             using var connection = new NpgsqlConnection(_connectionString);
             using var command = new NpgsqlCommand(SelectSql + " ORDER BY p.id", connection);
             connection.Open();
             using var reader = command.ExecuteReader();
             while (reader.Read())
             {
-                animals.Add(_factory.Create(reader));
+                items.Add(_factory.Create(reader));
             }
-            return animals;
+            return items;
         }
 
-        public Animal? GetById(int id)
+        public Item? GetById(int id)
         {
             using var connection = new NpgsqlConnection(_connectionString);
             using var command = new NpgsqlCommand(SelectSql + " WHERE p.id = @id", connection);
@@ -47,32 +47,30 @@ namespace AnimalMart.Repos
             return reader.Read() ? _factory.Create(reader) : null;
         }
 
-        public Animal Add(Animal animal)
+        public Item Add(Item item)
         {
             // Both inserts run as ONE statement, so they succeed or fail together:
-            // the CTE inserts into products and hands its new id to the animals insert.
+            // the CTE inserts into products and hands its new id to the items insert.
             const string sql = @"
                 WITH new_product AS (
                     INSERT INTO products (price, name, description)
                     VALUES (@price, @name, @description)
                     RETURNING id
                 )
-                INSERT INTO animals (id, sex, species, birthday)
-                SELECT id, @sex, @species, @birthday FROM new_product
+                INSERT INTO items (id, stock)
+                SELECT id, @stock FROM new_product
                 RETURNING id";
 
             using var connection = new NpgsqlConnection(_connectionString);
             using var command = new NpgsqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@price", animal.Price);
-            command.Parameters.AddWithValue("@name", animal.Name!);
-            command.Parameters.AddWithValue("@description", animal.Description!);
-            command.Parameters.AddWithValue("@sex", animal.Sex!);
-            command.Parameters.AddWithValue("@species", animal.Species!);
-            command.Parameters.AddWithValue("@birthday", animal.BirthDay); // DateOnly maps to DATE
+            command.Parameters.AddWithValue("@price", item.Price);
+            command.Parameters.AddWithValue("@name", item.Name!);
+            command.Parameters.AddWithValue("@description", item.Description!);
+            command.Parameters.AddWithValue("@stock", item.Stock);
 
             connection.Open();
-            animal.Id = Convert.ToInt32(command.ExecuteScalar());
-            return animal;
+            item.Id = Convert.ToInt32(command.ExecuteScalar());
+            return item;
         }
     }
 }

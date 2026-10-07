@@ -5,6 +5,7 @@ public class Animal : Product
     public DateOnly BirthDay { get; set; }
 
     public Animal(
+        int id,
         string sex,
         string species,
         DateOnly birthDay,
@@ -12,10 +13,10 @@ public class Animal : Product
         string name,
         string description
     )
-        : base(price, name, description)
+        : base(id, price, name, description)
     {
-        this.Sex = sex;
-        this.Species = species;
-        this.BirthDay = birthDay;
+        Sex = sex;
+        Species = species;
+        BirthDay = birthDay;
     }
 }
