@@ -22,16 +22,11 @@ namespace AnimalMart
 
             builder.Services.AddSwaggerGen();
 
-            //register repo/service for users/password hashing
+            //register repo/service
             builder.Services.AddScoped<IUserRepo, UserRepo>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IPasswordAnalyzer, PasswordAnalyzerService>();
             builder.Services.AddSingleton<ILoginAttemptTracker, LoginAttemptTracker>();
-            //register factories and repos/services for products
-            builder.Services.AddSingleton<AnimalFactory>();
-            builder.Services.AddSingleton<ItemFactory>();
-            builder.Services.AddScoped<IAnimalRepo, AnimalRepo>();
-            builder.Services.AddScoped<IItemRepo, ItemRepo>();
 
             //Password reset services
             builder.Services.AddScoped<IPasswordResetTokenRepo, PasswordResetTokenRepo>();
@@ -71,17 +66,13 @@ namespace AnimalMart
                     }
                 );
             });
-
-            //HSTS options
-            builder.Services.AddHsts(options =>
-            {
-                //Once a browser sees the header, it will refuse plain HTTP to that host for this timespan 
-                //SET TO ONLY 1 DAY FOR TESTING
-                options.MaxAge = TimeSpan.FromDays(1);
-                options.IncludeSubDomains = true;
-                options.Preload = false; // only set true if you intend to submit to hstspreload.org
-                options.ExcludedHosts.Clear(); // testing only, remove before deploy
-            });
+//             builder.Services.AddCors(options =>
+//              {
+//                  options.AddPolicy("Api", builder =>
+//                      builder.WithOrigins("http://localhost:5173")   // real frontend origin, if/when one exists
+//                      .WithMethods("GET", "POST")
+//                      .WithHeaders("Content-Type"));
+//              });
 
             var app = builder.Build();
 
@@ -98,13 +89,13 @@ namespace AnimalMart
             app.UseForwardedHeaders(forwardedHeadersOptions);
 
 
-            // Configure the HTTP request pipeline. CURRENTLY DISABLED FOR RUNNING LOCALLY ONLY
-            //if (!app.Environment.IsDevelopment())
-            //{
+            // Configure the HTTP request pipeline.
+            if (!app.Environment.IsDevelopment())
+            {
                 app.UseExceptionHandler("/Error");
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-            app.UseHsts();
-            //}
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
 
             app.UseHttpsRedirection();
 
@@ -115,6 +106,7 @@ namespace AnimalMart
 
             // Enable CORS
             app.UseCors("AllowAll");
+            //app.UseCors("Api");
 
 
             app.UseAuthentication();
