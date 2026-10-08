@@ -1,3 +1,37 @@
+:root {
+  /* Color */
+  --am-color-bg: #ffffff;
+  --am-color-surface: #ffffff;
+  --am-color-text: #111111;
+  --am-color-text-muted: #6b6b6b;
+  --am-color-border: #e2e2e2;
+  --am-color-border-strong: #111111;
+  --am-color-accent: #ff6900;
+
+  /* Typography */
+  --am-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --am-fs-h1: 2rem;
+  --am-fs-h2: 1.375rem;
+  --am-fs-body: 1rem;
+  --am-fs-small: 0.8125rem;
+  --am-fs-nav: 0.8125rem;
+  --am-tracking-nav: 0.08em;
+  --am-tracking-heading: 0.02em;
+
+  /* Spacing */
+  --am-space-1: 0.25rem;
+  --am-space-2: 0.5rem;
+  --am-space-3: 1rem;
+  --am-space-4: 1.5rem;
+  --am-space-5: 2rem;
+  --am-space-6: 3rem;
+  --am-space-7: 4rem;
+
+  /* Misc */
+  --am-radius: 0px;
+  --am-border-width: 1px;
+}
+
 html {
   font-size: 14px;
 }
@@ -8,17 +42,194 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
 body {
-  margin-bottom: 60px;
+  font-family: var(--am-font-sans);
+  color: var(--am-color-text);
+  background: var(--am-color-bg);
+}
+
+a {
+  color: var(--am-color-text);
+}
+
+a:hover {
+  color: var(--am-color-accent);
+}
+
+h1, h2, h3 {
+  letter-spacing: var(--am-tracking-heading);
+  font-weight: 600;
+}
+
+/* Buttons */
+.am-btn {
+  display: inline-block;
+  padding: 0.875rem 1.5rem;
+  font-size: var(--am-fs-small);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--am-tracking-nav);
+  text-align: center;
+  text-decoration: none;
+  border: var(--am-border-width) solid var(--am-color-border-strong);
+  border-radius: var(--am-radius);
+  background: var(--am-color-bg);
+  color: var(--am-color-text);
+  cursor: pointer;
+  transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+}
+
+.am-btn:hover {
+  background: var(--am-color-accent);
+  border-color: var(--am-color-accent);
+  color: #fff;
+}
+
+.am-btn--primary {
+  background: var(--am-color-text);
+  color: #fff;
+}
+
+.am-btn--primary:hover {
+  background: var(--am-color-accent);
+  border-color: var(--am-color-accent);
+}
+
+.am-btn--block {
+  display: block;
+  width: 100%;
+}
+
+.am-link-muted {
+  display: inline-block;
+  margin-top: var(--am-space-3);
+  font-size: var(--am-fs-small);
+  color: var(--am-color-text-muted);
+  text-decoration: underline;
+}
+
+.am-link-muted:hover {
+  color: var(--am-color-accent);
+}
+
+/* Form fields */
+.am-field {
+  margin-bottom: var(--am-space-4);
+  text-align: left;
+}
+
+.am-field__label {
+  display: block;
+  margin-bottom: var(--am-space-2);
+  font-size: var(--am-fs-small);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--am-tracking-nav);
+  color: var(--am-color-text-muted);
+}
+
+.am-field__input {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: var(--am-fs-body);
+  color: var(--am-color-text);
+  background: var(--am-color-surface);
+  border: var(--am-border-width) solid var(--am-color-border);
+  border-radius: var(--am-radius);
+  box-sizing: border-box;
+}
+
+.am-field__input:focus {
+  outline: none;
+  border-color: var(--am-color-border-strong);
+}
+
+/* Auth card (Login / CreateUser / ForgotPassword / ResetPassword) */
+.am-auth {
+  display: flex;
+  justify-content: center;
+  padding: var(--am-space-6) var(--am-space-3);
+}
+
+.am-auth-card {
+  width: 100%;
+  max-width: 400px;
+  padding: var(--am-space-5);
+  border: var(--am-border-width) solid var(--am-color-border);
+  text-align: center;
+}
+
+.am-auth-card__title {
+  font-size: var(--am-fs-h2);
+  text-transform: uppercase;
+  letter-spacing: var(--am-tracking-heading);
+  margin-bottom: var(--am-space-4);
+}
+
+.am-auth-card__text {
+  color: var(--am-color-text-muted);
+  margin-bottom: var(--am-space-4);
+}
+
+/* Hero (Index placeholder) */
+.am-hero {
+  text-align: center;
+  padding: var(--am-space-7) var(--am-space-3);
+}
+
+.am-hero__title {
+  font-size: var(--am-fs-h1);
+  text-transform: uppercase;
+  letter-spacing: var(--am-tracking-heading);
+  margin-bottom: var(--am-space-3);
+}
+
+.am-hero__subtitle {
+  font-size: var(--am-fs-body);
+  color: var(--am-color-text-muted);
+}
+
+/* Simple prose pages (Privacy) */
+.am-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: var(--am-space-5) var(--am-space-3);
+}
+
+.am-page-title {
+  font-size: var(--am-fs-h1);
+  text-transform: uppercase;
+  letter-spacing: var(--am-tracking-heading);
+  margin-bottom: var(--am-space-3);
+}
+
+.am-prose {
+  color: var(--am-color-text-muted);
+  line-height: 1.6;
+}
+
+/* Password strength bar (shared by CreateUser + ResetPassword) */
+.strength-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--am-color-border);
+  border-radius: var(--am-radius);
+  overflow: hidden;
+}
+
+#strengthFill {
+  height: 100%;
+  width: 0%;
+  background: #e74c3c;
+  border-radius: var(--am-radius);
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+/* Flat focus styling (no Bootstrap blue glow) */
+.am-field__input:focus,
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: none;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {

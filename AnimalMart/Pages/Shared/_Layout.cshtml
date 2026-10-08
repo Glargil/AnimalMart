@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -10,41 +10,46 @@
     <link rel="stylesheet" href="~/AnimalMart.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">AnimalMart</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Login">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/CreateUser">Create User</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+    <header class="am-header">
+        <div class="am-header__inner">
+            <a class="am-logo" asp-area="" asp-page="/Index">AnimalMart</a>
+            <nav class="am-nav">
+                <ul class="am-nav__list">
+                    <li>
+                        <a class="am-nav__link" asp-area="" asp-page="/CreateUser">Create User</a>
+                    </li>
+                    <li>
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <a class="am-nav__link am-nav__icon" asp-area="" asp-page="/Profile" aria-label="Profile">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <circle cx="12" cy="8" r="4" />
+                                    <path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8" />
+                                </svg>
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="am-nav__link am-nav__icon" asp-area="" asp-page="/Login" aria-label="Login">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <circle cx="12" cy="8" r="4" />
+                                    <path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8" />
+                                </svg>
+                            </a>
+                        }
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </header>
-    <div class="container">
+    <div class="container am-content">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
+    <footer class="am-footer">
+        <div class="am-footer__inner">
             &copy; 2026 - AnimalMart - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>

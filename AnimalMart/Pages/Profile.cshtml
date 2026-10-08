@@ -1,0 +1,12 @@
+@page
+@model ProfileModel
+@{
+    ViewData["Title"] = "Profile";
+}
+<div class="am-auth">
+    <div class="am-auth-card">
+        <h1 class="am-auth-card__title">@ViewData["Title"]</h1>
+        <p class="am-auth-card__text">@Model.Name</p>
+        <p class="am-auth-card__text">@Model.Email</p>
+    </div>
+</div>
