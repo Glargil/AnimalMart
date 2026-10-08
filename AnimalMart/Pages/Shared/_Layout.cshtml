@@ -19,6 +19,9 @@
                         <a class="am-nav__link" asp-area="" asp-page="/CreateUser">Create User</a>
                     </li>
                     <li>
+                        <a class="am-nav__link" asp-area="" asp-page="/Admin/CreateProduct">Create Product</a>
+                    </li>
+                    <li>
                         @if (User.Identity?.IsAuthenticated == true)
                         {
                             <a class="am-nav__link am-nav__icon" asp-area="" asp-page="/Profile" aria-label="Profile">
