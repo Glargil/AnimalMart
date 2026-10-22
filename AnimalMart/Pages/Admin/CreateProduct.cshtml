@@ -94,17 +94,13 @@
     <div class="col-md-6">
         <h3>Animals in database (@Model.Animals.Count)</h3>
         <table class="table table-sm">
-            <thead><tr><th>Id</th><th>Image</th><th>Name</th><th>Species</th><th>Sex</th><th>Birthday</th><th>Price</th></tr></thead>
-            <tbody>
-                @foreach (var a in Model.Animals)
-                {
-                    <tr><td>@a.Id</td><td>@if (a.ImgPath != null) { <img src="@a.ImgPath" alt="@a.Name" width="40" height="40" style="object-fit: cover" /> }</td><td>@a.Name</td><td>@a.Species</td><td>@a.Sex</td><td>@a.BirthDay</td><td>@a.Price</td></tr>
-            <thead><tr><th>Id</th><th>Name</th><th>Species</th><th>Sex</th><th>Birthday</th><th>Price</th><th></th></tr></thead>
+            <thead><tr><th>Id</th><th>Image</th><th>Name</th><th>Species</th><th>Sex</th><th>Birthday</th><th>Price</th><th></th></tr></thead>
             <tbody>
                 @foreach (var a in Model.Animals)
                 {
                     <tr>
                         <td>@a.Id</td>
+                        <td>@if (a.ImgPath != null) { <img src="@a.ImgPath" alt="@a.Name" width="40" height="40" style="object-fit: cover" /> }</td>
                         <td>@a.Name</td>
                         <td>@a.Species</td>
                         <td>@a.Sex</td>
@@ -125,17 +121,13 @@
     <div class="col-md-6">
         <h3>Items in database (@Model.Items.Count)</h3>
         <table class="table table-sm">
-            <thead><tr><th>Id</th><th>Image</th><th>Name</th><th>Stock</th><th>Price</th></tr></thead>
-            <tbody>
-                @foreach (var i in Model.Items)
-                {
-                    <tr><td>@i.Id</td><td>@if (i.ImgPath != null) { <img src="@i.ImgPath" alt="@i.Name" width="40" height="40" style="object-fit: cover" /> }</td><td>@i.Name</td><td>@i.Stock</td><td>@i.Price</td></tr>
-            <thead><tr><th>Id</th><th>Name</th><th>Stock</th><th>Price</th><th></th></tr></thead>
+            <thead><tr><th>Id</th><th>Image</th><th>Name</th><th>Stock</th><th>Price</th><th></th></tr></thead>
             <tbody>
                 @foreach (var i in Model.Items)
                 {
                     <tr>
                         <td>@i.Id</td>
+                        <td>@if (i.ImgPath != null) { <img src="@i.ImgPath" alt="@i.Name" width="40" height="40" style="object-fit: cover" /> }</td>
                         <td>@i.Name</td>
                         <td>@i.Stock</td>
                         <td>@i.Price</td>
