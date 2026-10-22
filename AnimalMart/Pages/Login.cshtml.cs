@@ -56,10 +56,12 @@ namespace AnimalMart.Pages
                     var principal = new ClaimsPrincipal(identity);
 
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                    HttpContext.Session.Clear();
                     return RedirectToPage("Index");
 
                 default:
                     return Page();
+
             }
         }
     }

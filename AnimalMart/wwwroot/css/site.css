@@ -61,6 +61,24 @@ h1, h2, h3 {
   font-weight: 600;
 }
 
+/* Header nav links (unscoped: AnchorTagHelper strips the CSS-isolation
+   scope attribute from <a> tags, so these can't live in _Layout.cshtml.css) */
+.am-logo {
+  text-decoration: none;
+}
+
+.am-logo:hover {
+  color: var(--am-color-text);
+}
+
+.am-nav__link {
+  text-decoration: none;
+}
+
+.am-nav__link:hover {
+  color: var(--am-color-accent);
+}
+
 /* Buttons */
 .am-btn {
   display: inline-block;

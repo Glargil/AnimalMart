@@ -8,5 +8,8 @@
         <h1 class="am-auth-card__title">@ViewData["Title"]</h1>
         <p class="am-auth-card__text">@Model.Name</p>
         <p class="am-auth-card__text">@Model.Email</p>
-    </div>
+        <form method="post" asp-page-handler="Logout">
+        <button class="btn btn-danger" type="submit">Logout</button>
+        </form>
+</div>
 </div>

@@ -24,6 +24,13 @@
                     <p class="product-meta">@animal.Species · @animal.Sex · born @animal.BirthDay.ToString("dd-MM-yyyy")</p>
                     <p>@animal.Description</p>
                     <p class="product-price">@animal.Price.ToString("0.00") kr.</p>
+                    <form method="post" 
+                    asp-page-handler="AddToShoppingCart">
+                        <input type="hidden" name="productId"
+                    value="@animal.Id" />
+                    <input type="hidden">
+                         <button class="btn btn-primary" type="submit">Tilføj til kurv</button>
+                    </form>
                 </div>
             }
         </div>

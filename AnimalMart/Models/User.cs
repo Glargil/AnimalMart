@@ -6,5 +6,4 @@ public class User
     public string Email { get; set; }
     public string? PhoneNumber { get; set; } = string.Empty;
     public string PasswordHash { get; set; } 
-    public ShoppingCart Cart { get; set; } = new ShoppingCart();
 }
