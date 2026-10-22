@@ -23,10 +23,15 @@ namespace AnimalMart
             builder.Services.AddSwaggerGen();
 
             //register repo/service
+            builder.Services.AddScoped<IAnimalRepo, AnimalRepo>();
+            builder.Services.AddScoped<IItemRepo, ItemRepo>();
+            builder.Services.AddSingleton<AnimalFactory>();
+            builder.Services.AddSingleton<ItemFactory>();
             builder.Services.AddScoped<IUserRepo, UserRepo>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IPasswordAnalyzer, PasswordAnalyzerService>();
             builder.Services.AddSingleton<ILoginAttemptTracker, LoginAttemptTracker>();
+
 
             //Password reset services
             builder.Services.AddScoped<IPasswordResetTokenRepo, PasswordResetTokenRepo>();
@@ -66,6 +71,13 @@ namespace AnimalMart
                     }
                 );
             });
+//             builder.Services.AddCors(options =>
+//              {
+//                  options.AddPolicy("Api", builder =>
+//                      builder.WithOrigins("http://localhost:5173")   // real frontend origin, if/when one exists
+//                      .WithMethods("GET", "POST")
+//                      .WithHeaders("Content-Type"));
+//              });
 
             var app = builder.Build();
 
@@ -99,6 +111,7 @@ namespace AnimalMart
 
             // Enable CORS
             app.UseCors("AllowAll");
+            //app.UseCors("Api");
 
 
             app.UseAuthentication();

@@ -1,4 +1,4 @@
-public interface IItemRepository
+public interface IItemRepo
 {
     public IEnumerable<Item> GetAll();
     public Item? GetById(int id);
