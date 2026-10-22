@@ -1,3 +1,4 @@
+using AnimalMart.Factories;
 using AnimalMart.Interfaces;
 using AnimalMart.Repos;
 using AnimalMart.Services;
@@ -35,6 +36,9 @@ namespace AnimalMart
             builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
 
 
+            //Checkout/payment (Strategy pattern)
+            builder.Services.AddScoped<PaymentStrategyFactory>();
+            builder.Services.AddScoped<CheckoutService>();
 
             //Password reset services
             builder.Services.AddScoped<IPasswordResetTokenRepo, PasswordResetTokenRepo>();
