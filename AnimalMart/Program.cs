@@ -35,6 +35,10 @@ namespace AnimalMart
             builder.Services.AddScoped<IItemRepo, ItemRepo>();
             builder.Services.AddScoped<AnimalFactory>();
             builder.Services.AddScoped<ItemFactory>();
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
+
+
             //Checkout/payment (Strategy pattern)
             builder.Services.AddScoped<PaymentStrategyFactory>();
             builder.Services.AddScoped<CheckoutService>();
@@ -77,6 +81,19 @@ namespace AnimalMart
                     }
                 );
             });
+
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession(options =>
+            {
+                options.Cookie.Name = ".AnimalMart.Session";
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SameSite = SameSiteMode.Strict;
+                options.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
+                    ? CookieSecurePolicy.SameAsRequest
+                    : CookieSecurePolicy.Always;
+                options.IdleTimeout = TimeSpan.FromMinutes(5);
+                });
+
 //             builder.Services.AddCors(options =>
 //              {
 //                  options.AddPolicy("Api", builder =>
@@ -122,6 +139,9 @@ namespace AnimalMart
 
             app.UseAuthentication();
             app.UseAuthorization();
+            
+            app.UseSession();
+
 
             app.MapStaticAssets();
             app.MapRazorPages().WithStaticAssets();
