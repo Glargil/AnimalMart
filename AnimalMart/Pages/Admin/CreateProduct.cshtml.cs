@@ -3,9 +3,11 @@ using AnimalMart.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using AnimalMart.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AnimalMart.Pages.Admin
 {
+    [Authorize(Roles = "Admin,SuperAdmin")]
     public class CreateProductModel : PageModel
     {
         private readonly AnimalFactory _animalFactory;
