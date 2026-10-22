@@ -1,3 +1,4 @@
+using AnimalMart.Factories;
 using AnimalMart.Interfaces;
 using AnimalMart.Repos;
 using AnimalMart.Services;
@@ -15,7 +16,10 @@ namespace AnimalMart
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddRazorPages();
+            builder.Services.AddRazorPages(options =>
+            {
+                options.Conventions.AuthorizeFolder("/Admin");
+            });
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.ConfigureHttpJsonOptions(options => options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
@@ -32,6 +36,13 @@ namespace AnimalMart
             builder.Services.AddScoped<AnimalFactory>();
             builder.Services.AddScoped<ItemFactory>();
             builder.Services.AddScoped<IImageStorage, ImageStorage>();
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
+
+
+            //Checkout/payment (Strategy pattern)
+            builder.Services.AddScoped<PaymentStrategyFactory>();
+            builder.Services.AddScoped<CheckoutService>();
 
             //Password reset services
             builder.Services.AddScoped<IPasswordResetTokenRepo, PasswordResetTokenRepo>();
@@ -71,6 +82,19 @@ namespace AnimalMart
                     }
                 );
             });
+
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession(options =>
+            {
+                options.Cookie.Name = ".AnimalMart.Session";
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SameSite = SameSiteMode.Strict;
+                options.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
+                    ? CookieSecurePolicy.SameAsRequest
+                    : CookieSecurePolicy.Always;
+                options.IdleTimeout = TimeSpan.FromMinutes(5);
+                });
+
 //             builder.Services.AddCors(options =>
 //              {
 //                  options.AddPolicy("Api", builder =>
@@ -119,6 +143,9 @@ namespace AnimalMart
 
             app.UseAuthentication();
             app.UseAuthorization();
+            
+            app.UseSession();
+
 
             app.MapStaticAssets();
             app.MapRazorPages().WithStaticAssets();

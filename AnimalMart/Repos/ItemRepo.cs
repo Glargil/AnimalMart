@@ -73,5 +73,62 @@ namespace AnimalMart.Repos
             item.Id = Convert.ToInt32(command.ExecuteScalar());
             return item;
         }
+        public void Update(Item item)
+        {
+            // Both rows change together inside one transaction.
+            using var connection = new NpgsqlConnection(_connectionString);
+            connection.Open();
+            using var transaction = connection.BeginTransaction();
+            try
+            {
+                const string productSql = @"
+                    UPDATE products
+                    SET price = @price, name = @name, description = @description
+                    WHERE id = @id";
+
+                int rows;
+                using (var command = new NpgsqlCommand(productSql, connection, transaction))
+                {
+                    command.Parameters.AddWithValue("@price", item.Price);
+                    command.Parameters.AddWithValue("@name", item.Name!);
+                    command.Parameters.AddWithValue("@description", item.Description!);
+                    command.Parameters.AddWithValue("@id", item.Id);
+                    rows = command.ExecuteNonQuery();
+                }
+
+                if (rows == 0)
+                {
+                    throw new KeyNotFoundException($"No item found with id {item.Id}.");
+                }
+
+                const string itemSql = "UPDATE items SET stock = @stock WHERE id = @id";
+
+                using (var command = new NpgsqlCommand(itemSql, connection, transaction))
+                {
+                    command.Parameters.AddWithValue("@stock", item.Stock);
+                    command.Parameters.AddWithValue("@id", item.Id);
+                    command.ExecuteNonQuery();
+                }
+
+                transaction.Commit();
+            }
+            catch
+            {
+                transaction.Rollback();
+                throw;
+            }
+        }
+
+        public void Delete(int id)
+        {
+            // Cascades to the items row and out of all carts.
+            const string sql = "DELETE FROM products WHERE id = @id";
+
+            using var connection = new NpgsqlConnection(_connectionString);
+            using var command = new NpgsqlCommand(sql, connection);
+            command.Parameters.AddWithValue("@id", id);
+            connection.Open();
+            command.ExecuteNonQuery();
+        }
     }
 }

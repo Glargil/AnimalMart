@@ -1,0 +1,58 @@
+@page
+@model CartIndexModel
+@{
+    ViewData["Title"] = "Your Cart";
+}
+
+<h1>Your Cart</h1>
+
+@if (Model.Cart.Lines.Count == 0)
+{
+    <p class="text-muted">Your cart is empty.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var line in Model.Cart.Lines)
+            {
+                <tr>
+                    <td>@line.Product.Name</td>
+                    <td>@line.Product.Price.ToString("0.00") kr.</td>
+                    <td>
+                        <form method="post" asp-page-handler="UpdateQuantity">
+                            <input type="hidden" name="productId" value="@line.Product.Id" />
+                            <input type="hidden" name="productType" value="@line.ProductType" />
+                            <input type="number" name="quantity" value="@line.Quantity" min="1" style="width:4rem" />
+                            <button class="btn btn-sm btn-secondary" type="submit">Update</button>
+                        </form>
+                    </td>
+                    <td>@line.Subtotal.ToString("0.00") kr.</td>
+                    <td>
+                        <form method="post" asp-page-handler="Remove">
+                            <input type="hidden" name="productId" value="@line.Product.Id" />
+                            <input type="hidden" name="productType" value="@line.ProductType" />
+                            <button class="btn btn-sm btn-danger" type="submit">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <p><strong>Total items:</strong> @Model.Cart.TotalQuantity</p>
+    <p><strong>Total price:</strong> @Model.Cart.TotalPrice.ToString("0.00") kr.</p>
+
+    <form method="post" asp-page-handler="Clear">
+        <button class="btn btn-outline-danger" type="submit">Clear Cart</button>
+    </form>
+}

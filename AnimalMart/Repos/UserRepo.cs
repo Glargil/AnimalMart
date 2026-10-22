@@ -6,6 +6,9 @@ namespace AnimalMart.Repos
     public class UserRepo : IUserRepo
     {
         private readonly string _connectionString;
+        // The only roles UpdateRole can ever write. A tampered form
+        // value dies here, long before it reaches SQL.
+        private static readonly string[] AllowedRoles = { "Customer", "Admin", "SuperAdmin" };
 
         public UserRepo(IConfiguration configuration)
         {
@@ -55,7 +58,7 @@ namespace AnimalMart.Repos
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 const string query =
-                    "SELECT id, name, email, phone_number, password_hash FROM users";
+                    "SELECT id, name, email, phone_number, password_hash, role FROM users";
                 connection.Open();
                 using (var command = new NpgsqlCommand(query, connection))
                 using (var reader = command.ExecuteReader())
@@ -72,6 +75,7 @@ namespace AnimalMart.Repos
                                 ? null
                                 : reader.GetString(reader.GetOrdinal("phone_number")),
                             PasswordHash = reader.GetString(reader.GetOrdinal("password_hash")),
+                            Role = reader.GetString(reader.GetOrdinal("role")),
                         };
                         users.Add(user);
                     }
@@ -85,7 +89,7 @@ namespace AnimalMart.Repos
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 const string query =
-                    "SELECT id, name, email, phone_number, password_hash FROM users WHERE id = @id";
+                    "SELECT id, name, email, phone_number, password_hash, role FROM users WHERE id = @id";
                 connection.Open();
                 using (var command = new NpgsqlCommand(query, connection))
                 {
@@ -110,6 +114,7 @@ namespace AnimalMart.Repos
                                 ? null
                                 : reader.GetString(reader.GetOrdinal("phone_number")),
                             PasswordHash = reader.GetString(reader.GetOrdinal("password_hash")),
+                            Role = reader.GetString(reader.GetOrdinal("role")),
                         };
                     }
                 }
@@ -121,7 +126,7 @@ namespace AnimalMart.Repos
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 const string query =
-                    "SELECT id, name, email, phone_number, password_hash FROM users WHERE lower(email) = lower(@email)";
+                    "SELECT id, name, email, phone_number, password_hash, role FROM users WHERE lower(email) = lower(@email)";
                 connection.Open();
                 using (var command = new NpgsqlCommand(query, connection))
                 {
@@ -141,6 +146,7 @@ namespace AnimalMart.Repos
                                 ? null
                                 : reader.GetString(reader.GetOrdinal("phone_number")),
                             PasswordHash = reader.GetString(reader.GetOrdinal("password_hash")),
+                            Role = reader.GetString(reader.GetOrdinal("role")),
                         };
                     }
                 }
@@ -163,6 +169,23 @@ namespace AnimalMart.Repos
 
             await conn.OpenAsync();
             await cmd.ExecuteNonQueryAsync();
+        }
+
+        
+        public void UpdateRole(int userId, string role)
+        {
+            if (!AllowedRoles.Contains(role))
+                throw new ArgumentException($"Unknown role: {role}.");
+
+            const string sql = "UPDATE users SET role = @role WHERE id = @userId";
+
+            using var connection = new NpgsqlConnection(_connectionString);
+            using var command = new NpgsqlCommand(sql, connection);
+            command.Parameters.AddWithValue("@role", role);
+            command.Parameters.AddWithValue("@userId", userId);
+            connection.Open();
+            if (command.ExecuteNonQuery() == 0)
+                throw new KeyNotFoundException($"No user found with id {userId}.");
         }
     }
 }

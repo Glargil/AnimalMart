@@ -99,6 +99,25 @@
                 @foreach (var a in Model.Animals)
                 {
                     <tr><td>@a.Id</td><td>@if (a.ImgPath != null) { <img src="@a.ImgPath" alt="@a.Name" width="40" height="40" style="object-fit: cover" /> }</td><td>@a.Name</td><td>@a.Species</td><td>@a.Sex</td><td>@a.BirthDay</td><td>@a.Price</td></tr>
+            <thead><tr><th>Id</th><th>Name</th><th>Species</th><th>Sex</th><th>Birthday</th><th>Price</th><th></th></tr></thead>
+            <tbody>
+                @foreach (var a in Model.Animals)
+                {
+                    <tr>
+                        <td>@a.Id</td>
+                        <td>@a.Name</td>
+                        <td>@a.Species</td>
+                        <td>@a.Sex</td>
+                        <td>@a.BirthDay</td>
+                        <td>@a.Price</td>
+                        <td>
+                            <a class="btn btn-sm btn-outline-primary" asp-page="EditAnimal" asp-route-id="@a.Id">Edit</a>
+                                <form method="post" asp-page-handler="DeleteAnimal" class="d-inline">
+                                    <input type="hidden" name="id" value="@a.Id" />
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </form>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
@@ -111,6 +130,23 @@
                 @foreach (var i in Model.Items)
                 {
                     <tr><td>@i.Id</td><td>@if (i.ImgPath != null) { <img src="@i.ImgPath" alt="@i.Name" width="40" height="40" style="object-fit: cover" /> }</td><td>@i.Name</td><td>@i.Stock</td><td>@i.Price</td></tr>
+            <thead><tr><th>Id</th><th>Name</th><th>Stock</th><th>Price</th><th></th></tr></thead>
+            <tbody>
+                @foreach (var i in Model.Items)
+                {
+                    <tr>
+                        <td>@i.Id</td>
+                        <td>@i.Name</td>
+                        <td>@i.Stock</td>
+                        <td>@i.Price</td>
+                        <td>
+                            <a class="btn btn-sm btn-outline-primary" asp-page="EditItem" asp-route-id="@i.Id">Edit</a>
+                                <form method="post" asp-page-handler="DeleteItem" class="d-inline">
+                                    <input type="hidden" name="id" value="@i.Id" />
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </form>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
