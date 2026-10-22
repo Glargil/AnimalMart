@@ -31,6 +31,10 @@ namespace AnimalMart
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IPasswordAnalyzer, PasswordAnalyzerService>();
             builder.Services.AddSingleton<ILoginAttemptTracker, LoginAttemptTracker>();
+            builder.Services.AddScoped<IAnimalRepo, AnimalRepo>();
+            builder.Services.AddScoped<IItemRepo, ItemRepo>();
+            builder.Services.AddScoped<AnimalFactory>();
+            builder.Services.AddScoped<ItemFactory>();
 
 
             //Password reset services
