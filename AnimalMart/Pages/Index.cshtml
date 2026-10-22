@@ -1,8 +1,13 @@
-﻿@page
+@page
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
 }
+
+<section class="am-hero">
+    <h1 class="am-hero__title">Welcome to AnimalMart</h1>
+    <p class="am-hero__subtitle">Your destination for animal companions.</p>
+</section>
 <section class="mb-5">
     <h2>Animals</h2>
     @if (Model.Animals.Count == 0)
@@ -19,6 +24,13 @@
                     <p class="product-meta">@animal.Species · @animal.Sex · born @animal.BirthDay.ToString("dd-MM-yyyy")</p>
                     <p>@animal.Description</p>
                     <p class="product-price">@animal.Price.ToString("0.00") kr.</p>
+                    <form method="post" 
+                    asp-page-handler="AddToShoppingCart">
+                        <input type="hidden" name="productId"
+                    value="@animal.Id" />
+                    <input type="hidden" name="productType" value="@ProductType.Animal">
+                         <button class="btn btn-primary" type="submit">Tilføj til kurv</button>
+                    </form>
                 </div>
             }
         </div>
@@ -40,6 +52,14 @@
                     <p class="product-meta">@(item.Stock > 0 ? $"{item.Stock} in stock" : "Out of stock")</p>
                     <p>@item.Description</p>
                     <p class="product-price">@item.Price.ToString("0.00") kr.</p>
+                    <form method="post" 
+                    asp-page-handler="AddToShoppingCart">
+                        <input type="hidden" name="productId"
+                    value="@item.Id" />
+                    <input type="hidden" name="productType" value="@ProductType.Item">
+                         <button class="btn btn-primary" type="submit">Tilføj til kurv</button>
+                    </form>
+
                 </div>
             }
         </div>
@@ -87,5 +107,4 @@
         .product-box {
             padding: 1.25rem;
         }
-    
 </style>
