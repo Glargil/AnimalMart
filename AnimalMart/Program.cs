@@ -31,6 +31,7 @@ namespace AnimalMart
             builder.Services.AddScoped<IItemRepo, ItemRepo>();
             builder.Services.AddScoped<AnimalFactory>();
             builder.Services.AddScoped<ItemFactory>();
+            builder.Services.AddScoped<IImageStorage, ImageStorage>();
 
             //Password reset services
             builder.Services.AddScoped<IPasswordResetTokenRepo, PasswordResetTokenRepo>();
@@ -102,6 +103,9 @@ namespace AnimalMart
             }
 
             app.UseHttpsRedirection();
+
+            // Serves files added at runtime (wwwroot/uploads); MapStaticAssets only knows files that existed at build time.
+            app.UseStaticFiles();
 
             app.UseRouting();
 
