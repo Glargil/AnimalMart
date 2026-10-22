@@ -1,0 +1,53 @@
+/*~*/
+/*~~*/ /*~~~~~~~~~*/
+~~
+    /*~~~~~~~~~~~~~*/ ~ /*~~~~~~~*/
+~
+
+<h1>Checkout</h1>
+
+~~~ /*~~~~~~~~~*/ ~~ ~~~ /*~*/
+~
+    <p>/*~~~~~~~~~*/</p>
+    <a asp-page="Index">Back to products</a>
+~
+/**/
+~
+    <div asp-validation-summary="/*~~~~~*/" class="text-danger"></div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th class="text-end">Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            /*~~~~*/ /**/ /*~~~*/ ~~ /*~~~~~~~~~~~~~*/
+            ~
+                <tr>
+                    <td>line.Product.Name</td>
+                    <td class="text-end">line.Product.Price.ToString("0.00") kr.</td>
+                </tr>
+            ~
+            <tr>
+                <td>Total</td>
+                <td class="text-end">/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/ kr.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Payment method</h2>
+
+    <form method="post">
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="paymentMethod" id="card" value="Card" checked />
+            <label class="form-check-label" for="card">Card</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="paymentMethod" id="mobilepay" value="MobilePay" />
+            <label class="form-check-label" for="mobilepay">MobilePay</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Pay</button>
+    </form>
+~

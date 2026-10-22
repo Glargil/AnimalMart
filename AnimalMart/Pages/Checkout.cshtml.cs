@@ -8,16 +8,16 @@ namespace AnimalMart.Pages
 {
     public class CheckoutModel : PageModel
     {
-        private readonly IItemRepo _itemRepo;
+        private readonly IShoppingCartService _cartService;
         private readonly PaymentStrategyFactory _strategyFactory;
         private readonly CheckoutService _checkoutService;
 
         public CheckoutModel(
-            IItemRepo itemRepo,
+            IShoppingCartService cartService,
             PaymentStrategyFactory strategyFactory,
             CheckoutService checkoutService)
         {
-            _itemRepo = itemRepo;
+            _cartService = cartService;
             _strategyFactory = strategyFactory;
             _checkoutService = checkoutService;
         }
@@ -27,7 +27,7 @@ namespace AnimalMart.Pages
 
         public void OnGet()
         {
-            LoadDemoCart();
+            Cart = _cartService.GetCart();
         }
 
         public IActionResult OnPost(PaymentMethod paymentMethod)
@@ -36,17 +36,18 @@ namespace AnimalMart.Pages
             // and is rejected here before any payment logic runs.
             if (!ModelState.IsValid)
             {
-                LoadDemoCart();
+                Cart = _cartService.GetCart();
                 return Page();
             }
 
-            LoadDemoCart();
+            Cart = _cartService.GetCart();
 
             _checkoutService.SetStrategy(_strategyFactory.Create(paymentMethod));
 
             try
             {
                 Result = _checkoutService.Checkout(Cart);
+                _cartService.ClearCart();
             }
             catch (InvalidOperationException ex)
             {
@@ -55,19 +56,6 @@ namespace AnimalMart.Pages
             }
 
             return Page();
-        }
-
-        // POC only: the "add to cart" story is not implemented yet,
-        // so the cart is filled with the first two products in the
-        // database to make checkout testable. Replace with the real
-        // cart once that story lands.
-        private void LoadDemoCart()
-        {
-            Cart = new ShoppingCart();
-            foreach (var item in _itemRepo.GetAll().Take(2))
-            {
-                Cart.AddProduct(item);
-            }
         }
     }
 }
