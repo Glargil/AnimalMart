@@ -11,9 +11,10 @@ public class Animal : Product
         DateOnly birthDay,
         decimal price,
         string name,
-        string description
+        string description,
+        string? imgPath = null
     )
-        : base(id, price, name, description)
+        : base(id, price, name, description, imgPath)
     {
         Sex = sex;
         Species = species;

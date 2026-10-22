@@ -13,7 +13,8 @@ public class AnimalFactory : ProductFactory
             DateOnly.FromDateTime(row.GetDateTime(row.GetOrdinal("birthday"))),
             row.GetDecimal(row.GetOrdinal("price")),
             row.GetString(row.GetOrdinal("name")),
-            row.GetString(row.GetOrdinal("description"))
+            row.GetString(row.GetOrdinal("description")),
+            ReadImgPath(row)
         );
     }
 
@@ -30,4 +31,5 @@ public class AnimalFactory : ProductFactory
 
         return new Animal(0, sex.Trim(), species.Trim(), birthDay, price, name.Trim(), description.Trim());
     }
+
 }

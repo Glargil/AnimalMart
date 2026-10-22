@@ -7,5 +7,6 @@
             public string? Description { get; set; }
             public string? Price { get; set; }
             public int? Stock { get; set; }
+            public IFormFile? Image { get; set; } // optional upload, saved by IImageStorage
         }
 }

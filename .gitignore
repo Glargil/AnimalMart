@@ -362,3 +362,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+# Admin image uploads (runtime data, not source)
+AnimalMart/wwwroot/uploads/

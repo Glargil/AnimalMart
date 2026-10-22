@@ -8,11 +8,13 @@ namespace AnimalMart.Pages
     {
         private readonly IAnimalRepo _animalRepo;
         private readonly IItemRepo _itemRepo;
+        private readonly IShoppingCartService _cartService;
 
-        public IndexModel(IAnimalRepo animalRepo, IItemRepo itemRepo)
+        public IndexModel(IAnimalRepo animalRepo, IItemRepo itemRepo, IShoppingCartService cartService)
         {
             _animalRepo = animalRepo;
             _itemRepo = itemRepo;
+            _cartService = cartService;
         }
 
         public List<Animal> Animals { get; set; } = new();
@@ -33,6 +35,12 @@ namespace AnimalMart.Pages
                 Animals = _animalRepo.Search(SearchTerm).ToList();
                 Items = _itemRepo.Search(SearchTerm).ToList();
             }
+        }
+
+        public IActionResult OnPostAddToShoppingCart(int productId, ProductType productType)
+        {
+            _cartService.AddProduct(productId, productType);
+            return RedirectToPage("./Index");
         }
     }
 }

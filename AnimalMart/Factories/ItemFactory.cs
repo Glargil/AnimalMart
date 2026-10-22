@@ -11,7 +11,8 @@ public class ItemFactory : ProductFactory
             row.GetInt32(row.GetOrdinal("stock")),
             row.GetString(row.GetOrdinal("name")),
             row.GetDecimal(row.GetOrdinal("price")),
-            row.GetString(row.GetOrdinal("description"))
+            row.GetString(row.GetOrdinal("description")),
+            ReadImgPath(row)
         );
     }
 
@@ -24,4 +25,5 @@ public class ItemFactory : ProductFactory
 
         return new Item(0, stock, name.Trim(), price, description.Trim());
     }
+
 }

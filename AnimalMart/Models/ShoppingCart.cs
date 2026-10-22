@@ -1,15 +1,11 @@
 public class ShoppingCart
 {
-    public List<Product> Products { get; set; }
-    public decimal TotalPrice => Products.Sum(p => p.Price);
+    public List<CartLine> Lines { get; set; }
+    public decimal TotalPrice => Lines.Sum(l => l.Subtotal);
+    public int TotalQuantity => Lines.Sum(l => l.Quantity);
 
     public ShoppingCart()
     {
-        Products = new List<Product>();
-    }
-
-    public void AddProduct(Product product)
-    {
-        Products.Add(product);
+        Lines = new List<CartLine>();
     }
 }

@@ -51,15 +51,18 @@ namespace AnimalMart.Pages
                         new Claim(ClaimTypes.NameIdentifier, attempt.User!.Id.ToString()),
                         new Claim(ClaimTypes.Name, attempt.User.Name),
                         new Claim(ClaimTypes.Email, attempt.User.Email),
+                        new Claim(ClaimTypes.Role, attempt.User.Role),
                     };
                     var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     var principal = new ClaimsPrincipal(identity);
 
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                    HttpContext.Session.Clear();
                     return RedirectToPage("Index");
 
                 default:
                     return Page();
+
             }
         }
     }

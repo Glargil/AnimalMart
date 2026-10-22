@@ -15,7 +15,7 @@ namespace AnimalMart.Services
 
         public string Checkout(ShoppingCart cart)
         {
-            if (cart.Products.Count == 0)
+            if (cart.Lines.Count == 0)
                 throw new InvalidOperationException("Cannot check out an empty cart.");
 
             if (_strategy is null)
