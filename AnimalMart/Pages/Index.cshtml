@@ -3,6 +3,10 @@
 @{
     ViewData["Title"] = "Home page";
 }
+<form method="get" class="search-form mb-4">
+    <input type="text" name="SearchTerm" value="@Model.SearchTerm" placeholder="Search animals and items..." />
+    <button type="submit">Search</button>
+</form>
 
 <section class="am-hero">
     <h1 class="am-hero__title">Welcome to AnimalMart</h1>
