@@ -18,5 +18,7 @@
         //method for updating hashed password
         Task UpdatePasswordHashAsync(int userId, string passwordHash);
 
+         void UpdateRole(int userId, string role);
+
     }
 }

@@ -3,9 +3,11 @@ using AnimalMart.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using AnimalMart.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AnimalMart.Pages.Admin
 {
+    [Authorize(Roles = "Admin,SuperAdmin")]
     public class CreateProductModel : PageModel
     {
         private readonly AnimalFactory _animalFactory;
@@ -108,6 +110,21 @@ namespace AnimalMart.Pages.Admin
                 LoadProducts();
                 return Page();
             }
+        }
+        // Called by the delete button in the animals table.
+        public IActionResult OnPostDeleteAnimal(int id)
+        {
+            _animalRepo.Delete(id);
+            TempData["Success"] = $"Animal with id {id} deleted.";
+            return RedirectToPage();
+        }
+
+        // Called by the delete button in the items table.
+        public IActionResult OnPostDeleteItem(int id)
+        {
+            _itemRepo.Delete(id);
+            TempData["Success"] = $"Item with id {id} deleted.";
+            return RedirectToPage();
         }
 
         private void LoadProducts()

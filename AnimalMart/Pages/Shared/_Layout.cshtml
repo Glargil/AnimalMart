@@ -29,6 +29,18 @@
                             }
                         </a>
                     </li>
+                        @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Admin/CreateProduct">Admin: Products</a>
+                            </li>
+                        }
+                        @if (User.IsInRole("SuperAdmin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Admin/Users">SuperAdmin: Users</a>
+                            </li>
+                        }
                     <li>
                         @if (User.Identity?.IsAuthenticated == true)
                         {
