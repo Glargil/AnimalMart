@@ -18,7 +18,7 @@
         {
             <div class="alert alert-danger">@Model.AnimalError</div>
         }
-        <form method="post" asp-page-handler="AddAnimal">
+        <form method="post" asp-page-handler="AddAnimal" enctype="multipart/form-data">
             <div class="mb-2">
                 <label asp-for="Animal.Name" class="form-label"></label>
                 <input asp-for="Animal.Name" class="form-control" />
@@ -48,6 +48,10 @@
                 <label asp-for="Animal.BirthDay" class="form-label"></label>
                 <input asp-for="Animal.BirthDay" type="date" class="form-control" />
             </div>
+            <div class="mb-3">
+                <label asp-for="Animal.Image" class="form-label">Image (optional)</label>
+                <input asp-for="Animal.Image" type="file" accept=".jpg,.jpeg,.png,.webp" class="form-control" />
+            </div>
             <button type="submit" class="btn btn-primary">Save animal</button>
         </form>
     </div>
@@ -58,7 +62,7 @@
         {
             <div class="alert alert-danger">@Model.ItemError</div>
         }
-        <form method="post" asp-page-handler="AddItem">
+        <form method="post" asp-page-handler="AddItem" enctype="multipart/form-data">
             <div class="mb-2">
                 <label asp-for="Item.Name" class="form-label"></label>
                 <input asp-for="Item.Name" class="form-control" />
@@ -75,6 +79,10 @@
                 <label asp-for="Item.Stock" class="form-label"></label>
                 <input asp-for="Item.Stock" type="number" min="0" class="form-control" />
             </div>
+            <div class="mb-3">
+                <label asp-for="Item.Image" class="form-label">Image (optional)</label>
+                <input asp-for="Item.Image" type="file" accept=".jpg,.jpeg,.png,.webp" class="form-control" />
+            </div>
             <button type="submit" class="btn btn-primary">Save item</button>
         </form>
     </div>
@@ -86,6 +94,11 @@
     <div class="col-md-6">
         <h3>Animals in database (@Model.Animals.Count)</h3>
         <table class="table table-sm">
+            <thead><tr><th>Id</th><th>Image</th><th>Name</th><th>Species</th><th>Sex</th><th>Birthday</th><th>Price</th></tr></thead>
+            <tbody>
+                @foreach (var a in Model.Animals)
+                {
+                    <tr><td>@a.Id</td><td>@if (a.ImgPath != null) { <img src="@a.ImgPath" alt="@a.Name" width="40" height="40" style="object-fit: cover" /> }</td><td>@a.Name</td><td>@a.Species</td><td>@a.Sex</td><td>@a.BirthDay</td><td>@a.Price</td></tr>
             <thead><tr><th>Id</th><th>Name</th><th>Species</th><th>Sex</th><th>Birthday</th><th>Price</th><th></th></tr></thead>
             <tbody>
                 @foreach (var a in Model.Animals)
@@ -112,6 +125,11 @@
     <div class="col-md-6">
         <h3>Items in database (@Model.Items.Count)</h3>
         <table class="table table-sm">
+            <thead><tr><th>Id</th><th>Image</th><th>Name</th><th>Stock</th><th>Price</th></tr></thead>
+            <tbody>
+                @foreach (var i in Model.Items)
+                {
+                    <tr><td>@i.Id</td><td>@if (i.ImgPath != null) { <img src="@i.ImgPath" alt="@i.Name" width="40" height="40" style="object-fit: cover" /> }</td><td>@i.Name</td><td>@i.Stock</td><td>@i.Price</td></tr>
             <thead><tr><th>Id</th><th>Name</th><th>Stock</th><th>Price</th><th></th></tr></thead>
             <tbody>
                 @foreach (var i in Model.Items)

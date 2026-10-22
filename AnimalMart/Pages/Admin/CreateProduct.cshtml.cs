@@ -1,5 +1,6 @@
 using System.Globalization;
 using AnimalMart.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using AnimalMart.Models;
@@ -14,18 +15,21 @@ namespace AnimalMart.Pages.Admin
         private readonly ItemFactory _itemFactory;
         private readonly IAnimalRepo _animalRepo;
         private readonly IItemRepo _itemRepo;
+        private readonly IImageStorage _imageStorage;
 
         public CreateProductModel(
             AnimalFactory animalFactory,
             ItemFactory itemFactory,
             IAnimalRepo animalRepo,
-            IItemRepo itemRepo
+            IItemRepo itemRepo,
+            IImageStorage imageStorage
         )
         {
             _animalFactory = animalFactory;
             _itemFactory = itemFactory;
             _animalRepo = animalRepo;
             _itemRepo = itemRepo;
+            _imageStorage = imageStorage;
         }
 
         // Both forms bind here, but only the submitted form's fields are posted.
@@ -68,12 +72,14 @@ namespace AnimalMart.Pages.Admin
                     Animal.Name ?? "",
                     Animal.Description ?? ""
                 );
+                // Saved only after the factory validated the fields, so a rejected form leaves no orphan file.
+                animal.ImgPath = _imageStorage.Save(Animal.Image);
                 _animalRepo.Add(animal);
 
                 TempData["Success"] = $"Animal '{animal.Name}' saved with id {animal.Id}.";
                 return RedirectToPage();
             }
-            catch (ArgumentException ex) // thrown by the factory's validation
+            catch (ArgumentException ex) // thrown by the factory's or the image storage's validation
             {
                 AnimalError = ex.Message;
                 LoadProducts();
@@ -99,6 +105,7 @@ namespace AnimalMart.Pages.Admin
                     price,
                     Item.Description ?? ""
                 );
+                item.ImgPath = _imageStorage.Save(Item.Image);
                 _itemRepo.Add(item);
 
                 TempData["Success"] = $"Item '{item.Name}' saved with id {item.Id}.";

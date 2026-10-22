@@ -10,6 +10,7 @@
             public string? Sex { get; set; }
             public string? Species { get; set; }
             public DateOnly? BirthDay { get; set; }
+            public IFormFile? Image { get; set; } // optional upload, saved by IImageStorage
         
     }
 }

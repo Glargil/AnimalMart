@@ -2,7 +2,8 @@ CREATE TABLE products (
     id          INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     price       NUMERIC(10, 2) NOT NULL CHECK (price >= 0),
     name        VARCHAR(200) NOT NULL,
-    description TEXT NOT NULL
+    description TEXT NOT NULL,
+    img_path    VARCHAR(255)
 );
 
 CREATE TABLE animals (
