@@ -11,5 +11,10 @@ public abstract class ProductFactory
         if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Name is required.", nameof(name));
         if (string.IsNullOrWhiteSpace(description)) throw new ArgumentException("Description is required.", nameof(description));
     }
+    protected static string? ReadImgPath(IDataRecord row)
+    {
+        int i = row.GetOrdinal("img_path");
+        return row.IsDBNull(i) ? null : row.GetString(i);
+    }
 }
 

@@ -6,7 +6,7 @@ namespace AnimalMart.Repos
     {
         // Joins the base table with the subtype table so one row has every Item field.
         private const string SelectSql = @"
-            SELECT p.id, p.price, p.name, p.description, i.stock
+            SELECT p.id, p.price, p.name, p.description, p.img_path, i.stock
             FROM products p
             JOIN items i ON i.id = p.id";
 
@@ -53,8 +53,8 @@ namespace AnimalMart.Repos
             // the CTE inserts into products and hands its new id to the items insert.
             const string sql = @"
                 WITH new_product AS (
-                    INSERT INTO products (price, name, description)
-                    VALUES (@price, @name, @description)
+                    INSERT INTO products (price, name, description, img_path)
+                    VALUES (@price, @name, @description, @img_path)
                     RETURNING id
                 )
                 INSERT INTO items (id, stock)
@@ -66,6 +66,7 @@ namespace AnimalMart.Repos
             command.Parameters.AddWithValue("@price", item.Price);
             command.Parameters.AddWithValue("@name", item.Name!);
             command.Parameters.AddWithValue("@description", item.Description!);
+            command.Parameters.AddWithValue("@img_path", (object?)item.ImgPath ?? DBNull.Value); // null -> SQL NULL
             command.Parameters.AddWithValue("@stock", item.Stock);
 
             connection.Open();

@@ -1,10 +1,10 @@
 -- Items
-INSERT INTO products (price, name, description) VALUES
-    (349.00, 'Terrarium Heat Lamp',            '75W ceramic heat emitter for reptile enclosures.'),
-    (129.00, 'Digital Hygrometer',             'Temperature and humidity gauge for terrariums.'),
-    (89.00,  'Calcium Powder with D3',         'Reptile supplement, 100g, for dusting live feed.'),
-    (249.00, 'Cork Bark Hide',                 'Natural cork bark hide, medium size.'),
-    (159.00, 'Live Cricket Colony Starter Kit','Breeding kit with 50 crickets and habitat.');
+INSERT INTO products (price, name, description, img_path) VALUES
+    (349.00, 'Terrarium Heat Lamp',            '75W ceramic heat emitter for reptile enclosures.', NULL),
+    (129.00, 'Digital Hygrometer',             'Temperature and humidity gauge for terrariums.', NULL),
+    (89.00,  'Calcium Powder with D3',         'Reptile supplement, 100g, for dusting live feed.', NULL),
+    (249.00, 'Cork Bark Hide',                 'Natural cork bark hide, medium size.', NULL),
+    (159.00, 'Live Cricket Colony Starter Kit','Breeding kit with 50 crickets and habitat.', NULL);
 
 INSERT INTO items (id, stock) SELECT id, 25 FROM products WHERE name = 'Terrarium Heat Lamp';
 INSERT INTO items (id, stock) SELECT id, 40 FROM products WHERE name = 'Digital Hygrometer';
@@ -13,11 +13,11 @@ INSERT INTO items (id, stock) SELECT id, 18 FROM products WHERE name = 'Cork Bar
 INSERT INTO items (id, stock) SELECT id, 12 FROM products WHERE name = 'Live Cricket Colony Starter Kit';
 
 -- Animals
-INSERT INTO products (price, name, description) VALUES
-    (899.00,  'Rango',  'Calm and colorful crested gecko, well-handled.'),
-    (1450.00, 'Zephyr', 'Vibrant green tree python, feeding well on schedule.'),
-    (299.00,  'Atlas',  'Docile Madagascar hissing cockroach, great starter insect.'),
-    (650.00,  'Ember',  'Striking orange baboon tarantula, established feeder.');
+INSERT INTO products (price, name, description, img_path) VALUES
+    (899.00,  'Rango',  'Calm and colorful crested gecko, well-handled.', '/img/Lizard.jpg'),
+    (1450.00, 'Zephyr', 'Vibrant green tree python, feeding well on schedule.', NULL),
+    (299.00,  'Atlas',  'Docile Madagascar hissing cockroach, great starter insect.', NULL),
+    (650.00,  'Ember',  'Striking orange baboon tarantula, established feeder.', NULL);
 
 INSERT INTO animals (id, sex, species, birthday)
 SELECT id, 'Male', 'Correlophus ciliatus', '2025-08-10' FROM products WHERE name = 'Rango';
