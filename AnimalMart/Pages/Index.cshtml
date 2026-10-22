@@ -28,7 +28,7 @@
                     asp-page-handler="AddToShoppingCart">
                         <input type="hidden" name="productId"
                     value="@animal.Id" />
-                    <input type="hidden">
+                    <input type="hidden" name="productType" value="@ProductType.Animal">
                          <button class="btn btn-primary" type="submit">Tilføj til kurv</button>
                     </form>
                 </div>
@@ -52,6 +52,14 @@
                     <p class="product-meta">@(item.Stock > 0 ? $"{item.Stock} in stock" : "Out of stock")</p>
                     <p>@item.Description</p>
                     <p class="product-price">@item.Price.ToString("0.00") kr.</p>
+                    <form method="post" 
+                    asp-page-handler="AddToShoppingCart">
+                        <input type="hidden" name="productId"
+                    value="@item.Id" />
+                    <input type="hidden" name="productType" value="@ProductType.Item">
+                         <button class="btn btn-primary" type="submit">Tilføj til kurv</button>
+                    </form>
+
                 </div>
             }
         </div>

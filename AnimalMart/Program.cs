@@ -23,10 +23,6 @@ namespace AnimalMart
             builder.Services.AddSwaggerGen();
 
             //register repo/service
-            builder.Services.AddScoped<IAnimalRepo, AnimalRepo>();
-            builder.Services.AddScoped<IItemRepo, ItemRepo>();
-            builder.Services.AddSingleton<AnimalFactory>();
-            builder.Services.AddSingleton<ItemFactory>();
             builder.Services.AddScoped<IUserRepo, UserRepo>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IPasswordAnalyzer, PasswordAnalyzerService>();
