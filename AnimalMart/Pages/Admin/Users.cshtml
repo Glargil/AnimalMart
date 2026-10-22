@@ -1,0 +1,59 @@
+﻿@page
+@model AnimalMart.Pages.Admin.UsersModel
+@{
+    ViewData["Title"] = "Manage Users";
+}
+
+<h1>Users</h1>
+
+@if (TempData["Success"] is string success)
+{
+    <div class="alert alert-success">@success</div>
+}
+@if (Model.Error != null)
+{
+    <div class="alert alert-danger">@Model.Error</div>
+}
+
+<table class="table table-sm">
+    <thead>
+        <tr><th>Id</th><th>Name</th><th>Email</th><th>Role</th><th>Change role</th></tr>
+    </thead>
+    <tbody>
+        @foreach (var u in Model.Users)
+        {
+            <tr>
+                <td>@u.Id</td>
+                <td>@u.Name</td>
+                <td>@u.Email</td>
+                <td>@u.Role</td>
+                <td>
+                    @if (u.Id == Model.CurrentUserId)
+                    {
+                        <span class="text-muted">current user</span>
+                    }
+                    else
+                    {
+                        <form method="post" asp-page-handler="UpdateRole" class="d-inline">
+                            <input type="hidden" name="userId" value="@u.Id" />
+                            <select name="role" class="form-select form-select-sm d-inline w-auto">
+                                @foreach (var r in Model.AllRoles)
+                                {
+                                    @if (r == u.Role)
+                                    {
+                                        <option value="@r" selected>@r</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@r">@r</option>
+                                    }
+                                }
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-outline-primary">Save</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
