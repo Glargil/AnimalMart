@@ -37,6 +37,24 @@ namespace AnimalMart.Repos
             return animals;
         }
 
+        public IEnumerable<Animal> Search(string term)
+        {
+            var animals = new List<Animal>();
+            using var connection = new NpgsqlConnection(_connectionString);
+            using var command = new NpgsqlCommand(
+                SelectSql + " WHERE p.name ILIKE @term OR p.description ILIKE @term ORDER BY p.id",
+                connection
+            );
+            command.Parameters.AddWithValue("@term", $"%{term}%");
+            connection.Open();
+            using var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                animals.Add(_factory.Create(reader));
+            }
+            return animals;
+        }
+
         public Animal? GetById(int id)
         {
             using var connection = new NpgsqlConnection(_connectionString);
