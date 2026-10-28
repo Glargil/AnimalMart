@@ -4,55 +4,84 @@
     ViewData["Title"] = "Your Cart";
 }
 
-<h1>Your Cart</h1>
+<h1 class="mb-4">Your Cart</h1>
 
 @if (Model.Cart.Lines.Count == 0)
 {
-    <p class="text-muted">Your cart is empty.</p>
+    <div class="alert alert-light border text-center py-5">
+        <p class="text-muted mb-3">Your cart is empty.</p>
+        <a class="btn btn-success" asp-page="/Index">Continue Shopping</a>
+    </div>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Product</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Subtotal</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var line in Model.Cart.Lines)
-            {
-                <tr>
-                    <td>@line.Product.Name</td>
-                    <td>@line.Product.Price.ToString("0.00") kr.</td>
-                    <td>
-                        <form method="post" asp-page-handler="UpdateQuantity">
-                            <input type="hidden" name="productId" value="@line.Product.Id" />
-                            <input type="hidden" name="productType" value="@line.ProductType" />
-                            <input type="number" name="quantity" value="@line.Quantity" min="1" style="width:4rem" />
-                            <button class="btn btn-sm btn-secondary" type="submit">Update</button>
-                        </form>
-                    </td>
-                    <td>@line.Subtotal.ToString("0.00") kr.</td>
-                    <td>
-                        <form method="post" asp-page-handler="Remove">
-                            <input type="hidden" name="productId" value="@line.Product.Id" />
-                            <input type="hidden" name="productType" value="@line.ProductType" />
-                            <button class="btn btn-sm btn-danger" type="submit">Remove</button>
-                        </form>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="card shadow-sm mb-4">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th class="text-center">Quantity</th>
+                        <th>Subtotal</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var line in Model.Cart.Lines)
+                    {
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-3">
+                                    @if (!string.IsNullOrEmpty(line.Product.ImgPath))
+                                    {
+                                        <img src="@line.Product.ImgPath" alt="@line.Product.Name" width="56" height="56" style="object-fit:cover;border-radius:.5rem" />
+                                    }
+                                    <span>@line.Product.Name</span>
+                                </div>
+                            </td>
+                            <td>@line.Product.Price.ToString("0.00") kr.</td>
+                            <td>
+                                <form method="post" asp-page-handler="UpdateQuantity" class="d-flex align-items-center justify-content-center gap-2">
+                                    <input type="hidden" name="productId" value="@line.Product.Id" />
+                                    <input type="hidden" name="productType" value="@line.ProductType" />
+                                    <input type="number" name="quantity" value="@line.Quantity" min="1" class="form-control form-control-sm" style="width:4.5rem" />
+                                    <button class="btn btn-sm btn-outline-secondary" type="submit">Update</button>
+                                </form>
+                            </td>
+                            <td><strong>@line.Subtotal.ToString("0.00") kr.</strong></td>
+                            <td class="text-end">
+                                <form method="post" asp-page-handler="Remove">
+                                    <input type="hidden" name="productId" value="@line.Product.Id" />
+                                    <input type="hidden" name="productType" value="@line.ProductType" />
+                                    <button class="btn btn-sm btn-outline-danger" type="submit">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-    <p><strong>Total items:</strong> @Model.Cart.TotalQuantity</p>
-    <p><strong>Total price:</strong> @Model.Cart.TotalPrice.ToString("0.00") kr.</p>
-
-    <form method="post" asp-page-handler="Clear">
-        <button class="btn btn-outline-danger" type="submit">Clear Cart</button>
-    </form>
+    <div class="d-flex justify-content-end">
+        <div class="card shadow-sm" style="min-width: 320px">
+            <div class="card-body">
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Total items</span>
+                    <strong>@Model.Cart.TotalQuantity</strong>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-muted">Total price</span>
+                    <strong class="fs-5">@Model.Cart.TotalPrice.ToString("0.00") kr.</strong>
+                </div>
+                <div class="d-grid gap-2">
+                    <a class="btn btn-success" asp-page="/Checkout">Checkout</a>
+                    <form method="post" asp-page-handler="Clear">
+                        <button class="btn btn-outline-danger w-100" type="submit">Clear Cart</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 }
