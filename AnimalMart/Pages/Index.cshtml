@@ -4,8 +4,8 @@
     ViewData["Title"] = "Home page";
 }
 <form method="get" class="search-form mb-4">
-    <input type="text" name="SearchTerm" value="@Model.SearchTerm" placeholder="Search animals and items..." />
-    <button type="submit">Search</button>
+    <input type="text" name="SearchTerm" value="@Model.SearchTerm" placeholder="Search animals and items..." class="search-form__input" />
+    <button type="submit" class="search-form__submit">Search</button>
 </form>
 
 <section class="am-hero">
@@ -82,8 +82,8 @@
     .product-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        grid-auto-rows: 1fr;
         gap: 1rem;
-        align-items: start;
         width: 100%;
     }
 
@@ -97,17 +97,30 @@
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
+        height: 100%;
     }
 
         /* Title and meta */
         .product-box h3 {
             margin: 0 0 0.25rem 0;
             font-size: 1.05rem;
+            min-height: 2.6em;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
     .product-meta {
         color: #6c757d;
         font-size: 0.9rem;
+    }
+
+    .product-box p:not(.product-meta):not(.product-price) {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
 
     /* Product image: same height on every card, cropped instead of stretched */
@@ -124,7 +137,8 @@
         font-weight: 600;
         color: #1f6feb;
     }
-        .product-box {
-            padding: 1.25rem;
-        }
+
+    .product-box form button {
+        width: 100%;
+    }
 </style>
