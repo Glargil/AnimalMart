@@ -52,6 +52,7 @@ namespace AnimalMart.Pages
             try
             {
                 Result = _checkoutService.Checkout(Cart);
+                SaveOrderHistory(paymentMethod); 
                 _cartService.ClearCart();
             }
             catch (InvalidOperationException ex)
