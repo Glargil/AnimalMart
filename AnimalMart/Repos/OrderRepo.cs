@@ -1,5 +1,4 @@
 using AnimalMart.Interfaces;
-using AnimalMart.Models;
 using Npgsql;
 
 namespace AnimalMart.Repos
