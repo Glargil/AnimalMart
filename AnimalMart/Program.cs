@@ -38,6 +38,7 @@ namespace AnimalMart
             builder.Services.AddScoped<IImageStorage, ImageStorage>();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
+            builder.Services.AddScoped<IOrderRepo, OrderRepo>();
 
 
             //Checkout/payment (Strategy pattern)
